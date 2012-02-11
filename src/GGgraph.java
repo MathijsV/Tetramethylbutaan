@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class GGgraph
 {
 	private List<GraphPoint> points = new ArrayList<GraphPoint>();
