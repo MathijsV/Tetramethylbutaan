@@ -64,7 +64,7 @@ public class GabrielGraph
 			{
 				votes.set(neighbours.get(i).getClassification()+1, votes.get(i)+1);
 			}
-			int most = Collections.max(votes);
+			int most = votes.indexOf(Collections.max(votes));
 			if(most-1 != p.getClassification())
 			{
 				removeEdgesOf(p);
