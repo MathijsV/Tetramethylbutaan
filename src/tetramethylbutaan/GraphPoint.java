@@ -1,3 +1,4 @@
+package tetramethylbutaan;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,11 @@ public class GraphPoint extends Point
 	public GraphPoint(double[] features, int c)
 	{
 		super(features, c);
+	}
+	
+	public GraphPoint()
+	{
+		super();
 	}
 	
 	public void addEdge(GraphPoint p)
@@ -33,5 +39,21 @@ public class GraphPoint extends Point
 			}
 		}
 		return false;
+	}
+	
+	public List<GraphPoint> getEdges()
+	{
+		return edges;
+	}
+	
+	public boolean removeEdge(GraphPoint p)
+	{
+		if(hasEdge(p))
+		{
+			edges.remove(p);
+			return true;
+		}
+		else
+			return false;
 	}
 }

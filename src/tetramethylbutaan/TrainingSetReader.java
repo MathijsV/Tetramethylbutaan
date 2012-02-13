@@ -1,13 +1,12 @@
+package tetramethylbutaan;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 
 public class TrainingSetReader
 {	
-	private GGgraph data = new GGgraph();
+	private GabrielGraph data = new GabrielGraph();
     private int nrPoints = 0;
 
 	public TrainingSetReader(String fileNaam)
@@ -21,9 +20,12 @@ public class TrainingSetReader
             	double[] features = new double[GraphPoint.nrDimensions];
             	for (int i = 0; i < Point.nrDimensions; i += 1)
             	{
-            		features[i] = scan.nextDouble();
+            		String attribute = scan.next();
+                	features[i] = Double.parseDouble(attribute);
+                	//System.out.println(features[i]);
             	}
             	int classification = scan.nextInt();
+            	//System.out.println(classification);
             	data.add(new GraphPoint(features, classification));
             }
             file.close();
@@ -34,7 +36,7 @@ public class TrainingSetReader
         }
     }
 	
-	public GGgraph getData()
+	public GabrielGraph getData()
 	{
 		return data;
 	}

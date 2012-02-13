@@ -1,9 +1,17 @@
+package tetramethylbutaan;
 
 public class Point
 {
 	public static int nrDimensions = 2;
+	public static int nrClasses = 2;
 	protected double[] features;
 	protected int classification = 0;
+	
+	public Point()
+	{
+		for(int i = 0; i< features.length; i++)
+			features[i] = 0;
+	}
 	
 	public Point(double[] features)
 	{
@@ -41,5 +49,10 @@ public class Point
 				return false;
 		}
 		return true;
+	}
+	
+	public int getClassification()
+	{
+		return classification;
 	}
 }
