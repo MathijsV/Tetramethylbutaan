@@ -52,9 +52,9 @@ public class GabrielGraph
 			}
 	}
 	
-	public void edit()
+	public void editFirstOrder()
 	{
-		for(GraphPoint p: points)
+		for(GraphPoint p: points) //iterator nodig?
 		{
 			List<Integer> votes = new ArrayList<Integer>();
 			for(int i = 0; i < Point.nrClasses +1; i++)

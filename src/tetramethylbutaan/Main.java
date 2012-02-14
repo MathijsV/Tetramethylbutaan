@@ -8,7 +8,7 @@ public class Main {
 	public static void main(String[] args) {
 		GabrielGraph gg = new TrainingSetReader("trainingssetXOR.txt").getData();
 		gg.createEdges();
-		gg.edit();
+		gg.editFirstOrder();
 
 	}
 
