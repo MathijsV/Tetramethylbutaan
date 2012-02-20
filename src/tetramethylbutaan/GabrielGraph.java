@@ -1,6 +1,7 @@
 package tetramethylbutaan;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 public class GabrielGraph
@@ -54,33 +55,35 @@ public class GabrielGraph
 	
 	public void editFirstOrder()
 	{
-		for(GraphPoint p: points) //iterator nodig?
+		Iterator<GraphPoint> iter = points.iterator();
+		while(iter.hasNext())
 		{
+			GraphPoint p = iter.next();
 			List<Integer> votes = new ArrayList<Integer>();
 			for(int i = 0; i < Point.nrClasses +1; i++)
-				votes.set(i, 0);
+				votes.add(0);
 			List<GraphPoint> neighbours = p.getEdges();
 			for(int i = 0; i < neighbours.size(); i++)
 			{
-				votes.set(neighbours.get(i).getClassification()+1, votes.get(i)+1);
+				int classnr = neighbours.get(i).getClassification();
+				votes.set(classnr+1, votes.get(classnr+1)+1);
 			}
 			int most = votes.indexOf(Collections.max(votes));
 			if(most-1 != p.getClassification())
 			{
-				removeEdgesOf(p);
+				List<GraphPoint> edges = p.getEdges();
+				for(int i = 0; i < edges.size(); i++)
+					edges.get(i).removeEdge(p);
+				iter.remove();
+				recalculateEdges(edges);
 			}
 			
 		}
 	}
 	
-	public void removeEdgesOf(GraphPoint p) 
+	public void recalculateEdges(List<GraphPoint> edges) 
 	//gebruik maken van dezelfde volgorde edges in sub als in this?
-	//nog niet gecheckt!
 	{
-		List<GraphPoint> edges = p.getEdges();
-		for(int i = 0; i < edges.size(); i++)
-			edges.get(i).removeEdge(p);
-		points.remove(p);
 		GabrielGraph sub = new GabrielGraph(edges);
 		for(GraphPoint sp: sub.points)
 		{
@@ -88,8 +91,9 @@ public class GabrielGraph
 			{
 				if(sp.equals(pp))
 				{
-					for(GraphPoint newEdge: sp.getEdges())
-						pp.addEdge(newEdge);
+					List<GraphPoint> spedges = sp.getEdges();
+					for(GraphPoint newEdge: spedges)
+						pp.copyEdge(newEdge);
 				}
 			}
 		}

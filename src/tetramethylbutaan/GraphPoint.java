@@ -28,7 +28,13 @@ public class GraphPoint extends Point
 		p.edges.add(p);
 	}
 	
-	// nodig?
+	public void copyEdge(GraphPoint p)
+	{
+		if(!hasEdge(p))
+			edges.add(p);
+	}
+	
+	// nodig? Ja ^^
 	public boolean hasEdge(GraphPoint point)
 	{
 		for (GraphPoint p : edges)
