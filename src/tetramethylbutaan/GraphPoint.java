@@ -30,14 +30,18 @@ public class GraphPoint extends Point
 	
 	public void copyEdge(GraphPoint p)
 	{
-		if(!hasEdgeWith(p))
+		if(!hasEdgeWith(p) && !p.hasEdgeWith(this))
+		{
 			edges.add(p);
+			p.edges.add(this);
+		}
 	}
 	
-    public List<GraphPoint> getNeighbours()
+	// Overbodige functie, zelfde als getEdges
+    /*public List<GraphPoint> getNeighbours()
     {
         return edges;
-    }
+    }*/
     
 	public boolean hasEdgeWith(GraphPoint point)
 	{
@@ -59,13 +63,14 @@ public class GraphPoint extends Point
 	
 	public boolean removeEdge(GraphPoint p)
 	{
-		if(hasEdgeWith(p))
+		return edges.remove(p);
+		/*if(hasEdgeWith(p))
 		{
 			edges.remove(p);
 			//p.edges.remove(this);
 			return true;
 		}
 		else
-			return false;
+			return false;*/
 	}
 }

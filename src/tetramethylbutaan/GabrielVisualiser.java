@@ -60,7 +60,7 @@ public class GabrielVisualiser extends JFrame
                 int x = (int)((point.features[0] + 1)* HALF_PANEL_WIDTH_DOUBLE);
                 int y = (int)((point.features[1] + 1)* HALF_PANEL_HEIGHT_DOUBLE);
                 
-                for (GraphPoint secondPoint : point.getNeighbours())
+                for (GraphPoint secondPoint : point.getEdges())
                 {
                     int x2 = (int)((secondPoint.features[0] + 1)* HALF_PANEL_WIDTH_DOUBLE);
                     int y2 = (int)((secondPoint.features[1] + 1)* HALF_PANEL_HEIGHT_DOUBLE);

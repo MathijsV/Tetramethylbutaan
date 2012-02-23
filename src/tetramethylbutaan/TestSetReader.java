@@ -4,18 +4,17 @@ import java.io.IOException;
 import java.util.Scanner;
 
 
-public class TrainingSetReader
+public class TestSetReader
 {	
-	private GabrielGraph data = new GabrielGraph();
-    private int nrPoints = 0;
-
-	public TrainingSetReader(String fileName)
+	public TestSetReader(String fileName, GabrielGraph g)
     {
         try
         {
+        	int numWrong = 0;
             FileReader file = new FileReader(fileName);
             Scanner scan = new Scanner(file);
-            for ( ; scan.hasNext(); nrPoints += 1)
+            int num = 0;
+            for(; scan.hasNext(); num++)
             {
             	double[] features = new double[GraphPoint.nrDimensions];
             	for (int i = 0; i < Point.nrDimensions; i += 1)
@@ -26,18 +25,18 @@ public class TrainingSetReader
             	}
             	int classification = scan.nextInt();
             	//System.out.println(classification);
-            	data.add(new GraphPoint(features, classification));
+            	if(classification != g.test(new GraphPoint(features)))
+            	{
+            		numWrong++;
+            		System.out.println("Wrong prediction for " + num);
+            	}
             }
             file.close();
+            System.out.println(numWrong + " wrongly predicted (" + (((double) numWrong / num) * 100.0) + "%)");
         }
         catch (IOException ioe)
         {
             System.out.println("cannot read file " + ioe.getMessage() );
         }
     }
-	
-	public GabrielGraph getData()
-	{
-		return data;
-	}
 }

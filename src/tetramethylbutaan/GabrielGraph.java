@@ -20,14 +20,37 @@ public class GabrielGraph
 	// zo doet hij niet veel
 	public GabrielGraph()
 	{
-		points = new ArrayList<GraphPoint>();
+		// Deze code doet niet zo veel.
+		/*points = new ArrayList<GraphPoint>();
 		for(GraphPoint p: points)
-			p = new GraphPoint();
+			p = new GraphPoint();*/
+		// En nu helemaal niet, want hij staat in comments.
 	}
 	
 	public void add(GraphPoint p)
 	{
 		points.add(p);
+	}
+	
+	/**
+	 * Tests which classification a given point p will get according to this graph.
+	 * @param p The point to test.
+	 * @return An integer indicating the expected classification.
+	 */
+	public int test(GraphPoint p)
+	{
+		// Start building a list of neighbours of this point
+		List<GraphPoint> neighbours = new ArrayList<GraphPoint>();
+		
+		Iterator<GraphPoint> iter = points.iterator();
+		while(iter.hasNext())
+		{
+			GraphPoint point = iter.next();
+			if(isNeighbour(p, point))
+				neighbours.add(point);
+		}
+		
+		return getFirstOrderClassification(neighbours);
 	}
 	
     public List<GraphPoint> getPoints()
@@ -61,7 +84,7 @@ public class GabrielGraph
 			for (int j = i+1; j < points.size(); j++)
 			{
 				GraphPoint p1 = points.get(i), p2 = points.get(j);
-				if (isNeighbour(p1, p2) && !p1.hasEdgeWith(p2)) //TODO voorlopig maar even dubbel dus
+				if (isNeighbour(p1, p2) && !p1.hasEdgeWith(p2))
 					p1.addEdge(p2);
 			}
 	}
@@ -156,4 +179,41 @@ public class GabrielGraph
 		}
 	}
 	
+	/**
+	 * Condenses the graph, meaning it removes every point that has the same classification
+	 * as all the neighbours of that point.
+	 * @return void
+	 */
+	public void condense()
+	{
+		Iterator<GraphPoint> iter = points.iterator();
+		while(iter.hasNext())
+		{
+			GraphPoint p = iter.next();
+			if(!hasNeighbourOfOtherClass(p))
+			{
+				// This graphpoint has the same type as all its neighbours, so we can safely ignore it.
+				List<GraphPoint> neighbours = p.getEdges();
+				Iterator<GraphPoint> neighbourIterator = neighbours.iterator();
+				while(neighbourIterator.hasNext())
+					neighbourIterator.next().removeEdge(p);
+				iter.remove();
+				recalculateEdges(neighbours);
+			}
+		}
+	}
+	
+	/**
+	 * Tests if the given point has a neighbour with a different class.
+	 * @param p The point whose neighbours will be checked.
+	 * @return True iff for any neighbour of p, class(p) != class(neighbour)
+	 */
+	private boolean hasNeighbourOfOtherClass(GraphPoint p)
+	{
+		Iterator<GraphPoint> neighbours = p.getEdges().iterator();
+		while(neighbours.hasNext())
+			if(p.getClassification() != neighbours.next().getClassification())
+				return true;
+		return false;
+	}
 }
