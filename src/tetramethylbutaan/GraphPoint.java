@@ -25,7 +25,7 @@ public class GraphPoint extends Point
 	public void addEdge(GraphPoint p)
 	{
 		edges.add(p);
-		p.edges.add(p);
+		p.edges.add(this);
 	}
 	
 	public void copyEdge(GraphPoint p)
@@ -41,14 +41,15 @@ public class GraphPoint extends Point
     
 	public boolean hasEdgeWith(GraphPoint point)
 	{
-		for (GraphPoint p : edges)
+		return edges.contains(point);
+		/*for (GraphPoint p : edges)
 		{
 			if (p.equals(point))
 			{
 				return true;
 			}
 		}
-		return false;
+		return false;*/
 	}
 	
 	public List<GraphPoint> getEdges()
@@ -61,6 +62,7 @@ public class GraphPoint extends Point
 		if(hasEdgeWith(p))
 		{
 			edges.remove(p);
+			//p.edges.remove(this);
 			return true;
 		}
 		else

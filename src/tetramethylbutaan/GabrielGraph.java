@@ -61,7 +61,7 @@ public class GabrielGraph
 			for (int j = i+1; j < points.size(); j++)
 			{
 				GraphPoint p1 = points.get(i), p2 = points.get(j);
-				if (isNeighbour(p1, p2) && !p1.hasEdgeWith(p2))
+				if (isNeighbour(p1, p2) && !p1.hasEdgeWith(p2)) //TODO voorlopig maar even dubbel dus
 					p1.addEdge(p2);
 			}
 	}
@@ -132,7 +132,7 @@ public class GabrielGraph
 	 */
 	public void edit(int editOrder)
 	{
-		if(editOrder != 1 && editOrder != 2)
+		if(editOrder != EDIT_1ST_ORDER && editOrder != EDIT_2ND_ORDER)
 			return;
 		else
 		{
@@ -142,7 +142,7 @@ public class GabrielGraph
 				GraphPoint p = iter.next();
 				if(getFirstOrderClassification(p.getEdges()) == p.getClassification())
 				{
-					if(editOrder == 1 || getSecondOrderClassification(p) == p.getClassification())
+					if(editOrder == EDIT_1ST_ORDER || getSecondOrderClassification(p) == p.getClassification())
 					{
 						List<GraphPoint> edges = p.getEdges();
 						for(int i = 0; i < edges.size(); i++)
