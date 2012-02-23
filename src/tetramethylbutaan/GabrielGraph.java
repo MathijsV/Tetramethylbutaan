@@ -15,8 +15,12 @@ public class GabrielGraph
 		this.points = points;
 		createEdges();
 	}
+	
+	// TODO: is deze nodig, zo ja, dan moet hij eerst zelf een nieuwe points aanmaken, welke grootte?
+	// zo doet hij niet veel
 	public GabrielGraph()
 	{
+		points = new ArrayList<GraphPoint>();
 		for(GraphPoint p: points)
 			p = new GraphPoint();
 	}
@@ -26,6 +30,11 @@ public class GabrielGraph
 		points.add(p);
 	}
 	
+    public List<GraphPoint> getPoints()
+    {
+        return points;
+    }
+    
 	public boolean isNeighbour(GraphPoint p1, GraphPoint p2)
 	{
 		if (p1.equals(p2))
@@ -43,14 +52,16 @@ public class GabrielGraph
 		return true;
 	}
 	
-	// TODO; de helft van de combinanties wegknippen -> Done
+	// TODO; de helft van de combinaties wegknippen -> Done
+	// TODO: is dat eigenlijk wel handig? Elke point moet namelijk weten
+	// welke edges hij heeft, nu weet maar één van de twee points het
 	public void createEdges()
 	{
 		for (int i = 0; i < points.size(); i++)
 			for (int j = i+1; j < points.size(); j++)
 			{
 				GraphPoint p1 = points.get(i), p2 = points.get(j);
-				if (isNeighbour(p1, p2) && !p1.hasEdge(p2))
+				if (isNeighbour(p1, p2) && !p1.hasEdgeWith(p2))
 					p1.addEdge(p2);
 			}
 	}
