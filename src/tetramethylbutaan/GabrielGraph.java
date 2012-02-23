@@ -17,7 +17,7 @@ public class GabrielGraph
 	}
 	public GabrielGraph()
 	{
-		for(GraphPoint p: points) //gaat hier iets fout?
+		for(GraphPoint p: points)
 			p = new GraphPoint();
 	}
 	
@@ -55,7 +55,11 @@ public class GabrielGraph
 			}
 	}
 	
-	private boolean isMisclassifiedFirstOrder(List<GraphPoint> neighbours, int classification)//GraphPoint p) //dit gaat mis als p.getClassification() < -1
+	/**
+	 * @param neighbours: the neighbours of a point or subgraph
+	 * @return the most occuring class in neighbours 
+	 */
+	public int getFirstOrderClassification(List<GraphPoint> neighbours)
 	{
 		List<Integer> votes = new ArrayList<Integer>();
 		for(int i = 0; i < Point.nrClasses +1; i++)
@@ -63,13 +67,16 @@ public class GabrielGraph
 		for(int i = 0; i < neighbours.size(); i++)
 		{
 			int classnr = neighbours.get(i).getClassification();
-			votes.set(classnr+1, votes.get(classnr+1)+1);
+			votes.set(classnr+1, votes.get(classnr+1)+1);	//dit gaat mis als p.getClassification() < -1
 		}
-		int most = votes.indexOf(Collections.max(votes));
-		return (most-1) != classification;
+		return votes.indexOf(Collections.max(votes)) - 1;
 	}
 	
-	private boolean isMisclassifiedSecondOrder(GraphPoint p)
+	/**
+	 * @param p: the point to be classified
+	 * @return the classification of p based on the neighbours of p and the neighbours' neighbours
+	 */
+	public int getSecondOrderClassification(GraphPoint p)
 	{
 		List<GraphPoint> neighbourhood = new ArrayList<GraphPoint>();
 		for(GraphPoint neighbour: p.getEdges())
@@ -78,18 +85,22 @@ public class GabrielGraph
 			{
 				for(GraphPoint edge: neighbour.getEdges())
 				{
-					if(!neighbourhood.contains(edge))
+					if(!neighbourhood.contains(edge) && !p.getEdges().contains(edge))
 						neighbourhood.add(edge);
 				}
 			}
 		}
-		return isMisclassifiedFirstOrder(neighbourhood,p.getClassification());
+		return getFirstOrderClassification(neighbourhood);
 	}
 	
-	private void recalculateEdges(List<GraphPoint> edges) 
+	/**
+	 * calculates the (new) edges between the neighbours
+	 * @param neighbours: the neighbours of already a removed point
+	 */
+	private void recalculateEdges(List<GraphPoint> neighbours) 
 	//gebruik maken van dezelfde volgorde edges in sub als in this?
 	{
-		GabrielGraph sub = new GabrielGraph(edges);
+		GabrielGraph sub = new GabrielGraph(neighbours);
 		for(GraphPoint sp: sub.points)
 		{
 			for(GraphPoint pp: points)
@@ -104,24 +115,33 @@ public class GabrielGraph
 		}
 	}
 	
+	/**
+	 * removes graphpoints from a graph which are misclassified by their neighbours
+	 * @param editOrder: EDIT_1ST_ORDER or EDIT_2ND_ORDER expected
+	 */
 	public void edit(int editOrder)
 	{
-		Iterator<GraphPoint> iter = points.iterator();
-		while(iter.hasNext())
+		if(editOrder != 1 && editOrder != 2)
+			return;
+		else
 		{
-			GraphPoint p = iter.next();
-			if(isMisclassifiedFirstOrder(p.getEdges(), p.getClassification()))
+			Iterator<GraphPoint> iter = points.iterator();
+			while(iter.hasNext())
 			{
-				if(editOrder == 1 || isMisclassifiedSecondOrder(p))
+				GraphPoint p = iter.next();
+				if(getFirstOrderClassification(p.getEdges()) == p.getClassification())
 				{
-					List<GraphPoint> edges = p.getEdges();
-					for(int i = 0; i < edges.size(); i++)
-						edges.get(i).removeEdge(p);
-					iter.remove();
-					recalculateEdges(edges);
+					if(editOrder == 1 || getSecondOrderClassification(p) == p.getClassification())
+					{
+						List<GraphPoint> edges = p.getEdges();
+						for(int i = 0; i < edges.size(); i++)
+							edges.get(i).removeEdge(p);
+						iter.remove();
+						recalculateEdges(edges);
+					}
 				}
+				
 			}
-			
 		}
 	}
 	
