@@ -1,16 +1,19 @@
 package tetramethylbutaan;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 
 public class TestSetReader
 {	
+	private List<Integer> results = new ArrayList<Integer>();
+	
 	public TestSetReader(String fileName, GabrielGraph g)
     {
         try
         {
-        	int numWrong = 0;
             FileReader file = new FileReader(fileName);
             Scanner scan = new Scanner(file);
             int num = 0;
@@ -23,21 +26,21 @@ public class TestSetReader
                 	features[i] = Double.parseDouble(attribute);// - 0.000001;
                 	//System.out.println(features[i]);
             	}
-            	int classification = scan.nextInt();
+            	//int classification = scan.nextInt();
             	//System.out.println(classification);
             	
-            	if(classification != g.test(new GraphPoint(features)))
-            	{
-            		numWrong++;
-            		System.out.println("Wrong prediction for " + num);
-            	}
+            	results.add(g.test(new GraphPoint(features)));
             }
             file.close();
-            System.out.println(numWrong + " wrongly predicted (" + (((double) numWrong / num) * 100.0) + "%)");
         }
         catch (IOException ioe)
         {
             System.out.println("cannot read file " + ioe.getMessage() );
         }
     }
+	
+	public List<Integer> getResults()
+	{
+		return results;
+	}
 }
