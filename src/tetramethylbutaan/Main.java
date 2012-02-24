@@ -8,11 +8,11 @@ public class Main {
 	public static void main(String[] args) {
 		GabrielGraph gabrielGraph = new TrainingSetReader("trainingssetXOR.txt").getData();
 		gabrielGraph.createEdges();
-		gabrielGraph.edit(GabrielGraph.EDIT_2ND_ORDER);
-		gabrielGraph.condense();
+		gabrielGraph.edit(GabrielGraph.EDIT_1ST_ORDER);
+		//gabrielGraph.condense();
 
-		new TestSetReader("trainingssetXOR.txt", gabrielGraph);
-		new GabrielVisualiser(gabrielGraph);
+		new TestSetReader("trainSets/train_set_009_n100_err0.txt", gabrielGraph);
+		//new GabrielVisualiser(gabrielGraph);
 	}
 
 }

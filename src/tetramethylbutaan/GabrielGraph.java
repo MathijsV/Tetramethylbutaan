@@ -18,18 +18,46 @@ public class GabrielGraph
 	
 	// TODO: is deze nodig, zo ja, dan moet hij eerst zelf een nieuwe points aanmaken, welke grootte?
 	// zo doet hij niet veel
+	//Maar wel iets: TrainingSetReader gebruikt deze constructor om nullpointerexception te voorkomen en zodat createEdges niet wordt aangeroepen voordat alle punten zijn toegevoegd
 	public GabrielGraph()
 	{
-		// Deze code doet niet zo veel.
-		/*points = new ArrayList<GraphPoint>();
-		for(GraphPoint p: points)
-			p = new GraphPoint();*/
+		// Deze code doet niet zo veel. 
+		//points = new ArrayList<GraphPoint>();
+		//for(GraphPoint p: points)
+		//	p = new GraphPoint();
 		// En nu helemaal niet, want hij staat in comments.
 	}
 	
 	public void add(GraphPoint p)
 	{
 		points.add(p);
+	}
+	
+	public void addPointToGraph(GraphPoint p, int classification)
+	{
+		List<GraphPoint> neighbours = new ArrayList<GraphPoint>();
+		for(GraphPoint gp: points)
+		{
+			if(isNeighbour(p, gp))
+			{
+				neighbours.add(gp);
+			}
+		}
+		for(GraphPoint nb1: neighbours)
+		{
+			for(GraphPoint nb2: neighbours)
+			{
+				if(nb1.hasEdgeWith(nb2))
+				{
+					nb1.removeEdge(nb2);
+					nb2.removeEdge(nb1);
+				}
+			}
+		}
+		p.setClassification(classification);
+		points.add(p);
+		neighbours.add(p);
+		recalculateEdges(neighbours);
 	}
 	
 	/**
@@ -49,8 +77,9 @@ public class GabrielGraph
 			if(isNeighbour(p, point))
 				neighbours.add(point);
 		}
-		
-		return getFirstOrderClassification(neighbours);
+		int classification = getFirstOrderClassification(neighbours);
+		//addPointToGraph(p, classification);
+		return classification;
 	}
 	
     public List<GraphPoint> getPoints()
@@ -78,15 +107,18 @@ public class GabrielGraph
 	// TODO; de helft van de combinaties wegknippen -> Done
 	// TODO: is dat eigenlijk wel handig? Elke point moet namelijk weten
 	// welke edges hij heeft, nu weet maar één van de twee points het
+	//Ja, is wel handig: addEdge voegt bij beide punten het andere punt toe als edge
 	public void createEdges()
 	{
 		for (int i = 0; i < points.size(); i++)
+		{
 			for (int j = i+1; j < points.size(); j++)
 			{
 				GraphPoint p1 = points.get(i), p2 = points.get(j);
 				if (isNeighbour(p1, p2) && !p1.hasEdgeWith(p2))
 					p1.addEdge(p2);
 			}
+		}
 	}
 	
 	/**
