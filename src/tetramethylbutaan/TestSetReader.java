@@ -25,6 +25,7 @@ public class TestSetReader
             	}
             	int classification = scan.nextInt();
             	//System.out.println(classification);
+            	
             	if(classification != g.test(new GraphPoint(features)))
             	{
             		numWrong++;
