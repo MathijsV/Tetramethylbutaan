@@ -20,7 +20,7 @@ public class TestSetReader
             	for (int i = 0; i < Point.nrDimensions; i += 1)
             	{
             		String attribute = scan.next();
-                	features[i] = Double.parseDouble(attribute);
+                	features[i] = Double.parseDouble(attribute);// - 0.000001;
                 	//System.out.println(features[i]);
             	}
             	int classification = scan.nextInt();
