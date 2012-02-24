@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class TrainingSetReader
 {	
-	private GabrielGraph data = new GabrielGraph();
+	private /*GabrielGraph*/ RelatedNeighbourHoodGraph data = new RelatedNeighbourHoodGraph();// new GabrielGraph();
     private int nrPoints = 0;
 
 	public TrainingSetReader(String fileName)
@@ -36,7 +36,7 @@ public class TrainingSetReader
         }
     }
 	
-	public GabrielGraph getData()
+	public /*GabrielGraph*/ RelatedNeighbourHoodGraph getData()
 	{
 		return data;
 	}

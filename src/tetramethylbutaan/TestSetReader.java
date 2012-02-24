@@ -10,7 +10,7 @@ public class TestSetReader
 {	
 	private List<Integer> results = new ArrayList<Integer>();
 	
-	public TestSetReader(String fileName, GabrielGraph g)
+	public TestSetReader(String fileName, /*GabrielGraph*/ RelatedNeighbourHoodGraph g)
     {
         try
         {

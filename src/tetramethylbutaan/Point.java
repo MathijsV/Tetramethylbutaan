@@ -24,6 +24,17 @@ public class Point
 		setClassification(c);
 	}
 	
+	public double euclidianDistance(Point p)
+	{
+		double distance = 0;
+		for (int i = 0; i < nrDimensions; i += 1)
+		{
+			double featureDistance2 = features[i] - p.features[i];
+			distance += featureDistance2;
+		}
+		return distance;
+	}
+	
 	public double euclidianDistance2(Point p)
 	{
 		double distance = 0;

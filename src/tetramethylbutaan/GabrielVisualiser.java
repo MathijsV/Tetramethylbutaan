@@ -23,8 +23,8 @@ public class GabrielVisualiser extends JFrame
     private static final int PANEL_HEIGHT = 500;
 
     JPanel panel = new GraphPanel();
-    GabrielGraph graph;
-    public GabrielVisualiser(GabrielGraph graph)
+    Graph graph;
+    public GabrielVisualiser(Graph graph)
     {
         super();
         setDefaultCloseOperation(EXIT_ON_CLOSE);

@@ -1,9 +1,9 @@
 package tetramethylbutaan;
 import java.util.List;
 
-public class GabrielGraph extends Graph
+public class RelatedNeighbourHoodGraph extends Graph
 {
-	public GabrielGraph(List<GraphPoint> points)
+	public RelatedNeighbourHoodGraph(List<GraphPoint> points)
 	{
 		this.points = points;
 		createEdges();
@@ -12,7 +12,7 @@ public class GabrielGraph extends Graph
 	// TODO: is deze nodig, zo ja, dan moet hij eerst zelf een nieuwe points aanmaken, welke grootte?
 	// zo doet hij niet veel
 	//Maar wel iets: TrainingSetReader gebruikt deze constructor om nullpointerexception te voorkomen en zodat createEdges niet wordt aangeroepen voordat alle punten zijn toegevoegd
-	public GabrielGraph()
+	public RelatedNeighbourHoodGraph()
 	{
 		// Deze code doet niet zo veel. 
 		//points = new ArrayList<GraphPoint>();
@@ -29,8 +29,8 @@ public class GabrielGraph extends Graph
 		for (Point point : points)
 		{
 			if (!point.equals(p1) && !point.equals(p2) &&
-					p1.euclidianDistance2(p2) >
-					p1.euclidianDistance2(point) + p2.euclidianDistance2(point))
+					p1.euclidianDistance(p2) >
+					Math.max(p1.euclidianDistance(point), p2.euclidianDistance(point)))
 			{
 				return false;
 			}
@@ -41,7 +41,7 @@ public class GabrielGraph extends Graph
 	protected void recalculateEdges(List<GraphPoint> neighbours) 
 	//gebruik maken van dezelfde volgorde edges in sub als in this?
 	{
-		GabrielGraph sub = new GabrielGraph(neighbours);
+		RelatedNeighbourHoodGraph sub = new RelatedNeighbourHoodGraph(neighbours);
 		for(GraphPoint sp: sub.points)
 		{
 			for(GraphPoint pp: points)
