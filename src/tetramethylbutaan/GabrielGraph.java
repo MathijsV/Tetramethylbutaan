@@ -128,11 +128,14 @@ public class GabrielGraph
 	public int getFirstOrderClassification(List<GraphPoint> neighbours)
 	{
 		List<Integer> votes = new ArrayList<Integer>();
+		
 		for(int i = 0; i < Point.nrClasses +1; i++)
 			votes.add(0);
-		for(int i = 0; i < neighbours.size(); i++)
+		
+		Iterator<GraphPoint> neighbourIterator = neighbours.iterator();
+		while(neighbourIterator.hasNext())
 		{
-			int classnr = neighbours.get(i).getClassification();
+			int classnr = neighbourIterator.next().getClassification();
 			votes.set(classnr+1, votes.get(classnr+1)+1);	//dit gaat mis als p.getClassification() < -1
 		}
 		return votes.indexOf(Collections.max(votes)) - 1;
@@ -200,8 +203,9 @@ public class GabrielGraph
 					if(editOrder == EDIT_1ST_ORDER || getSecondOrderClassification(p) == p.getClassification())
 					{
 						List<GraphPoint> edges = p.getEdges();
-						for(int i = 0; i < edges.size(); i++)
-							edges.get(i).removeEdge(p);
+						Iterator<GraphPoint> edgeIterator = edges.iterator();
+						while(edgeIterator.hasNext())
+							edgeIterator.next().removeEdge(p);
 						iter.remove();
 						recalculateEdges(edges);
 					}
