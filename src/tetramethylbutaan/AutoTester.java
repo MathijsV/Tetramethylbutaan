@@ -17,15 +17,15 @@ public class AutoTester
 			{
 				int numTotal = 0, numWrongTotal = 0;
 				
-				System.out.println("Testing with training set " + i + ", error rate " + err);
-				System.out.println("Creating graph...");
-				RelatedNeighbourHoodGraph gabrielGraph = new TrainingSetReader("trainSets/train_set_" + String.format("%03d", i) + "_n" + n + "_err" + err + ".txt").getData();
+				//System.out.println("Testing with training set " + i + ", error rate " + err);
+				//System.out.println("Creating graph...");
+				GabrielGraph gabrielGraph = (GabrielGraph) new TrainingSetReader("trainSets/train_set_" + String.format("%03d", i) + "_n" + n + "_err" + err + ".txt").getData();
 				gabrielGraph.createEdges();
-				System.out.println("Editing graph...");
+				//System.out.println("Editing graph...");
 				gabrielGraph.edit(GabrielGraph.EDIT_2ND_ORDER);
-				System.out.println("Condensing graph...");
+				//System.out.println("Condensing graph...");
 				gabrielGraph.condense();
-				System.out.println("Graph ready. Starting tests...");
+				//System.out.println("Graph ready. Starting tests...");
 				
 				for(int j = 1; j <= 40; j++)
 				{
