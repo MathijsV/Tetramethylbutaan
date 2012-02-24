@@ -30,7 +30,7 @@ public class AutoTester
 				for(int j = 1; j <= 40; j++)
 				{
 					//System.out.println("Testing set " + j);
-					System.out.print(j + " ");
+					//System.out.print(j + " ");
 					Iterator<Integer> results = new TestSetReader("testSets/test_data_" + String.format("%03d", j) + "_n" + n + ".txt", gabrielGraph)
 													.getResults().iterator();
 					
@@ -51,7 +51,7 @@ public class AutoTester
 		            //System.out.println("Test complete. Items tested: " + num + ", wrong predictions: " + numWrong + " (" + ((double) numWrong / num) * 100 + "%)");
 				}
 				
-				System.out.println("\nTest for training set " + i + " complete (error rate " + err + "). Average wrong predictions: " + ((double) numWrongTotal / numTotal) * 100 + "%");
+				System.out.println("Set " + i + ", error rate " + err + ": " + ((double) numWrongTotal / numTotal) * 100 + "% wrongly predicted on average");
 			}
 		}
 	}

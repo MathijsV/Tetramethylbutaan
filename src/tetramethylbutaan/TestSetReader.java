@@ -16,7 +16,7 @@ public class TestSetReader
         {
             FileReader file = new FileReader(fileName);
             Scanner scan = new Scanner(file);
-            int num = 0;
+            int num = 0, numWrong = 0;
             for(; scan.hasNext(); num++)
             {
             	double[] features = new double[GraphPoint.nrDimensions];
@@ -26,12 +26,17 @@ public class TestSetReader
                 	features[i] = Double.parseDouble(attribute);// - 0.000001;
                 	//System.out.println(features[i]);
             	}
-            	//int classification = scan.nextInt();
-            	//System.out.println(classification);
-            	
-            	results.add(g.test(new GraphPoint(features)));
+            	int classification = scan.nextInt();
+            	System.out.println(num);
+            	int testRes = g.test(new GraphPoint(features));
+            	if(testRes != classification)
+            	{
+            		numWrong++;
+            	}
+            	//results.add(g.test(new GraphPoint(features)));
             }
             file.close();
+            System.out.println(((double) numWrong / num) * 100);
         }
         catch (IOException ioe)
         {
