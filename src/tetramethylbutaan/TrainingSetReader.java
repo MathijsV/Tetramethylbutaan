@@ -38,6 +38,9 @@ public class TrainingSetReader
 	
 	public Graph getData()
 	{
+		/*GabrielGraph gg = new GabrielGraph();
+		gg.makeGraph(data.getPoints());
+		return gg;*/
 		return data;
 	}
 }

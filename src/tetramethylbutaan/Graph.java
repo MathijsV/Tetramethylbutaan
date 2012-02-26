@@ -15,16 +15,33 @@ public abstract class Graph
 		points.add(p);
 	}
 	
+	public void makeGraph(List<GraphPoint> ps)
+    {
+        for(GraphPoint p: ps)
+        {
+            addPointToGraph(p, p.getClassification());
+        }
+    }
+	
 	public void addPointToGraph(GraphPoint p, int classification)
 	{
 		List<GraphPoint> neighbours = new ArrayList<GraphPoint>();
-		for(GraphPoint gp: points)
+		/*for(GraphPoint gp: points)
 		{
 			if(isNeighbour(p, gp))
 			{
 				neighbours.add(gp);
 			}
-		}
+		}*/
+		for(GraphPoint gp: points)
+        {
+            if(isNeighbour(p, gp))
+            {
+                neighbours.add(gp);
+                neighbours.addAll(gp.getEdges());
+                break;
+            }
+        }
 		for(GraphPoint nb1: neighbours)
 		{
 			for(GraphPoint nb2: neighbours)
