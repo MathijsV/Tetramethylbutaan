@@ -73,4 +73,9 @@ public class GraphPoint extends Point
 		else
 			return false;*/
 	}
+
+    void removeEdges()
+    {
+        edges = new ArrayList<GraphPoint>();
+    }
 }

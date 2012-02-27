@@ -2,11 +2,13 @@ package tetramethylbutaan;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 public abstract class Graph
 {
 	public final static int EDIT_1ST_ORDER = 1, EDIT_2ND_ORDER = 2;
+    public static int K = 1;
 	
 	protected List<GraphPoint> points = new ArrayList<GraphPoint>();
 	
@@ -75,11 +77,23 @@ public abstract class Graph
 			GraphPoint point = iter.next();
 			if(p.equals(point)) return point.getClassification();
 			if(isNeighbour(p, point))
-				neighbours.add(point);
+            {
+				/*if(!neighbours.contains(point)) */
+                neighbours.add(point);
+
+                /*for(GraphPoint neighbour : point.getEdges())
+                {
+                    if(neighbour != p && !neighbours.contains(neighbour))
+                    {
+                        neighbours.add(neighbour);
+                    }
+                }*/
+            }
 		}
-		int classification = getFirstOrderClassification(neighbours);
-		//addPointToGraph(p, classification);
-		return classification;
+
+        Collections.sort(neighbours, new DistanceComparator(p));
+
+		return getFirstOrderClassification(neighbours.subList(0, (Math.min(K, neighbours.size()))));
 	}
 	
     public List<GraphPoint> getPoints()
@@ -91,7 +105,7 @@ public abstract class Graph
 	
 	// TODO; de helft van de combinaties wegknippen -> Done
 	// TODO: is dat eigenlijk wel handig? Elke point moet namelijk weten
-	// welke edges hij heeft, nu weet maar één van de twee points het
+	// welke edges hij heeft, nu weet maar ï¿½ï¿½n van de twee points het
 	//Ja, is wel handig: addEdge voegt bij beide punten het andere punt toe als edge
 	public void createEdges()
 	{
@@ -105,7 +119,15 @@ public abstract class Graph
 			}
 		}
 	}
-	
+
+    private void removeEdges()
+    {
+        for (GraphPoint p : points)
+        {
+            p.removeEdges();
+        }
+    }
+
 	/**
 	 * @param neighbours: the neighbours of a point or subgraph
 	 * @return the most occuring class in neighbours 
@@ -159,7 +181,8 @@ public abstract class Graph
 	 */
 	public void edit(int editOrder)
 	{
-		if(editOrder != EDIT_1ST_ORDER && editOrder != EDIT_2ND_ORDER)
+		List<GraphPoint> removePoints = new LinkedList<GraphPoint>();
+        if(editOrder != EDIT_1ST_ORDER && editOrder != EDIT_2ND_ORDER)
 			return;
 		else
 		{
@@ -175,12 +198,36 @@ public abstract class Graph
 						Iterator<GraphPoint> edgeIterator = edges.iterator();
 						while(edgeIterator.hasNext())
 							edgeIterator.next().removeEdge(p);
-						iter.remove();
-						recalculateEdges(edges);
+                        removePoints.add(p);
 					}
 				}
 				
 			}
+
+           // points.removeAll(removePoints);
+            Iterator<GraphPoint> it = removePoints.iterator();
+            Iterator<GraphPoint> it2 = points.iterator();
+            GraphPoint r;
+            if(it.hasNext())
+            {
+                r = it.next();
+                while(it2.hasNext())
+                {
+                    GraphPoint p = it2.next();
+                    if(p.equals(r))
+                    {
+                        it2.remove();
+                        if(it.hasNext())
+                        {
+                            r = it.next();
+                        }
+                        else
+                            break;
+                    }
+                }
+            }
+            removeEdges();
+            createEdges();
 		}
 	}
 	
