@@ -3,24 +3,16 @@ import java.util.List;
 
 public class GabrielGraph extends Graph
 {
-	public GabrielGraph(List<GraphPoint> points)
-	{
-		this.points = points;
-		createEdges();
-	}
-	
-	// TODO: is deze nodig, zo ja, dan moet hij eerst zelf een nieuwe points aanmaken, welke grootte?
-	// zo doet hij niet veel
-	//Maar wel iets: TrainingSetReader gebruikt deze constructor om nullpointerexception te voorkomen en zodat createEdges niet wordt aangeroepen voordat alle punten zijn toegevoegd
-	public GabrielGraph()
-	{
-		// Deze code doet niet zo veel. 
-		//points = new ArrayList<GraphPoint>();
-		//for(GraphPoint p: points)
-		//	p = new GraphPoint();
-		// En nu helemaal niet, want hij staat in comments.
-	}
-	
+    public GabrielGraph()
+    {
+
+    }
+
+    public GabrielGraph(List<GraphPoint> points)
+    {
+        this.points.addAll(points);
+    }
+
 	public boolean isNeighbour(GraphPoint p1, GraphPoint p2)
 	{
 		if (p1.equals(p2))
@@ -42,6 +34,7 @@ public class GabrielGraph extends Graph
 	//gebruik maken van dezelfde volgorde edges in sub als in this?
 	{
 		GabrielGraph sub = new GabrielGraph(neighbours);
+        sub.createEdges();
 		for(GraphPoint sp: sub.points)
 		{
 			for(GraphPoint pp: points)

@@ -4,14 +4,20 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class Graph
 {
 	public final static int EDIT_1ST_ORDER = 1, EDIT_2ND_ORDER = 2;
-    public static int K = 1;
+    public final static int K = 1;
+    public final static int NUM_THREADS = 4;
 	
 	protected List<GraphPoint> points = new ArrayList<GraphPoint>();
-	
+    
 	public void add(GraphPoint p)
 	{
 		points.add(p);
@@ -102,22 +108,24 @@ public abstract class Graph
     }
     
 	public abstract boolean isNeighbour(GraphPoint p1, GraphPoint p2);
-	
-	// TODO; de helft van de combinaties wegknippen -> Done
-	// TODO: is dat eigenlijk wel handig? Elke point moet namelijk weten
-	// welke edges hij heeft, nu weet maar ��n van de twee points het
-	//Ja, is wel handig: addEdge voegt bij beide punten het andere punt toe als edge
+
 	public void createEdges()
 	{
-		for (int i = 0; i < points.size(); i++)
-		{
-			for (int j = i+1; j < points.size(); j++)
-			{
-				GraphPoint p1 = points.get(i), p2 = points.get(j);
-				if (isNeighbour(p1, p2) && !p1.hasEdgeWith(p2))
-					p1.addEdge(p2);
-			}
-		}
+        ExecutorService executor = Executors.newCachedThreadPool();
+        for(int i = 0; i < NUM_THREADS; i++)
+        {
+            EdgeCreator e = new EdgeCreator(this, i, NUM_THREADS);
+            executor.execute(e);
+        }
+        try
+        {
+        	executor.shutdown();
+            executor.awaitTermination(10, TimeUnit.HOURS);
+        }
+        catch (InterruptedException ex)
+        {
+            Logger.getLogger(Graph.class.getName()).log(Level.SEVERE, null, ex);
+        }
 	}
 
     private void removeEdges()
@@ -132,7 +140,7 @@ public abstract class Graph
 	 * @param neighbours: the neighbours of a point or subgraph
 	 * @return the most occuring class in neighbours 
 	 */
-	public int getFirstOrderClassification(List<GraphPoint> neighbours)
+	public static int getFirstOrderClassification(List<GraphPoint> neighbours)
 	{
 		List<Integer> votes = new ArrayList<Integer>();
 		

@@ -2,8 +2,8 @@ package tetramethylbutaan;
 
 public class Point
 {
-	public static int nrDimensions = 196;
-	public static int nrClasses = 10;
+	public static int nrDimensions = 2;
+	public static int nrClasses = 2;
 	protected double[] features;
 	protected int classification = 0;
 	
