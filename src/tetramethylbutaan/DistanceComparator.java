@@ -24,10 +24,17 @@ public class DistanceComparator implements Comparator
     {
         Point p1 = (Point) o1;
         Point p2 = (Point) o2;
-        
-        if(p.euclidianDistance2(p1) < p.euclidianDistance2(p2))
+
+        double dist1 = p.euclidianDistance2(p1);
+        double dist2 = p.euclidianDistance2(p2);
+
+        if(dist1 < dist2)
         {
             return -1;
+        }
+        else if(dist1 == dist2)
+        {
+            return 0;
         }
         else
         {

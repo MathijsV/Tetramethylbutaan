@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -13,8 +14,9 @@ import java.util.logging.Logger;
 public abstract class Graph
 {
 	public final static int EDIT_1ST_ORDER = 1, EDIT_2ND_ORDER = 2;
-    public final static int K = 1;
+    public final static int K = 3;
     public final static int NUM_THREADS = 4;
+    private static Random random = new Random();
 	
 	protected List<GraphPoint> points = new ArrayList<GraphPoint>();
     
@@ -84,16 +86,16 @@ public abstract class Graph
 			if(p.equals(point)) return point.getClassification();
 			if(isNeighbour(p, point))
             {
-				/*if(!neighbours.contains(point)) */
-                neighbours.add(point);
+				if(!neighbours.contains(point))
+                    neighbours.add(point);
 
-                /*for(GraphPoint neighbour : point.getEdges())
+                for(GraphPoint neighbour : point.getEdges())
                 {
                     if(neighbour != p && !neighbours.contains(neighbour))
                     {
                         neighbours.add(neighbour);
                     }
-                }*/
+                }
             }
 		}
 
@@ -153,7 +155,18 @@ public abstract class Graph
 			int classnr = neighbourIterator.next().getClassification();
 			votes.set(classnr+1, votes.get(classnr+1)+1);	//dit gaat mis als p.getClassification() < -1
 		}
-		return votes.indexOf(Collections.max(votes)) - 1;
+
+        List<Integer> possibleClasses = new ArrayList<Integer>();
+        int maxVotes = Collections.max(votes), counter = 0;
+
+        for(Integer i : votes)
+        {
+            if(i == maxVotes)
+                possibleClasses.add(counter-1);
+            counter++;
+        }
+
+        return possibleClasses.get(random.nextInt(possibleClasses.size()));
 	}
 	
 	/**
@@ -198,9 +211,9 @@ public abstract class Graph
 			while(iter.hasNext())
 			{
 				GraphPoint p = iter.next();
-				if(getFirstOrderClassification(p.getEdges()) == p.getClassification())
+				if(getFirstOrderClassification(p.getEdges()) != p.getClassification())
 				{
-					if(editOrder == EDIT_1ST_ORDER || getSecondOrderClassification(p) == p.getClassification())
+					if(editOrder == EDIT_1ST_ORDER || getSecondOrderClassification(p) != p.getClassification())
 					{
 						List<GraphPoint> edges = p.getEdges();
 						Iterator<GraphPoint> edgeIterator = edges.iterator();
@@ -212,28 +225,51 @@ public abstract class Graph
 				
 			}
 
+            System.out.println("Editing: removing " + removePoints.size() + " points");
            // points.removeAll(removePoints);
-            Iterator<GraphPoint> it = removePoints.iterator();
-            Iterator<GraphPoint> it2 = points.iterator();
-            GraphPoint r;
-            if(it.hasNext())
+            Iterator<GraphPoint> removeIt = removePoints.iterator();
+            Iterator<GraphPoint> allPointsIt = points.iterator();
+            
+
+            int outputCounter = 0;    // for testing only
+            int showOutputCounter = 1;// for testing only
+
+            while (removeIt.hasNext())
             {
-                r = it.next();
-                while(it2.hasNext())
+                Point pointToRemove = removeIt.next();
+                while (allPointsIt.next() != pointToRemove);
+                allPointsIt.remove();
+
+                //for testing only
+                outputCounter++;
+                if (outputCounter == showOutputCounter)
                 {
-                    GraphPoint p = it2.next();
-                    if(p.equals(r))
+                    //System.out.println (outputCounter + " point removed");
+                    showOutputCounter*=2;
+                    showOutputCounter = Math.min(outputCounter, 50);
+                }
+            }
+            /*
+            GraphPoint pointToRemove;
+            if(removeIt.hasNext())
+            {
+                while(allPointsIt.hasNext())
+                {
+                    GraphPoint p = allPointsIt.next();
+                    if(p == pointToRemove)
                     {
-                        it2.remove();
-                        if(it.hasNext())
+                        allPointsIt.remove();
+                        if(removeIt.hasNext())
                         {
-                            r = it.next();
+                            pointToRemove = removeIt.next();
                         }
                         else
                             break;
                     }
                 }
-            }
+             }
+             */
+            
             removeEdges();
             createEdges();
 		}
@@ -247,20 +283,50 @@ public abstract class Graph
 	public void condense()
 	{
 		Iterator<GraphPoint> iter = points.iterator();
+        List<GraphPoint> pointsToRemove = new ArrayList<GraphPoint>();
+
 		while(iter.hasNext())
 		{
 			GraphPoint p = iter.next();
 			if(!hasNeighbourOfOtherClass(p))
 			{
+                pointsToRemove.add(p);
 				// This graphpoint has the same type as all its neighbours, so we can safely ignore it.
-				List<GraphPoint> neighbours = p.getEdges();
+				/*List<GraphPoint> neighbours = p.getEdges();
 				Iterator<GraphPoint> neighbourIterator = neighbours.iterator();
 				while(neighbourIterator.hasNext())
 					neighbourIterator.next().removeEdge(p);
 				iter.remove();
-				recalculateEdges(neighbours);
+				recalculateEdges(neighbours);*/
 			}
 		}
+
+        Iterator<GraphPoint> allPointsIt = points.iterator();
+        Iterator<GraphPoint> removeIt = pointsToRemove.iterator();
+        System.out.println("Condensing: removing " + pointsToRemove.size() + " points");
+        while (removeIt.hasNext())
+        {
+            GraphPoint pointToRemove = removeIt.next();
+            GraphPoint lastPoint = allPointsIt.next();
+
+            // Loop through the points until we encounter a point that needs to be removed
+            while (lastPoint != pointToRemove)
+            {
+                lastPoint = allPointsIt.next();
+            }
+
+            // Remove the edges between the point and its neighbours
+            List<GraphPoint> neighbours = lastPoint.getEdges();
+            Iterator<GraphPoint> neighbourIterator = neighbours.iterator();
+			while(neighbourIterator.hasNext())
+				neighbourIterator.next().removeEdge(lastPoint);
+
+            // Remove the point
+            allPointsIt.remove();
+        }
+
+        removeEdges();
+        createEdges();
 	}
 	
 	/**

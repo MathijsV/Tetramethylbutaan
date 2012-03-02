@@ -2,7 +2,7 @@ package tetramethylbutaan;
 
 public class Point
 {
-	public static int nrDimensions = 2;
+	public static int nrDimensions = 8;
 	public static int nrClasses = 2;
 	protected double[] features;
 	protected int classification = 0;
@@ -23,11 +23,16 @@ public class Point
 		this(features);
 		setClassification(c);
 	}
+
+    public double[] getFeatures()
+    {
+        return features;
+    }
 	
 	public double euclidianDistance2(Point p)
 	{
 		double distance = 0;
-		for (int i = 0; i < nrDimensions; i += 1)
+		for (int i = 0; i < nrDimensions; i++)
 		{
 			double featureDistance2 = features[i] - p.features[i];
 			featureDistance2 *= featureDistance2;

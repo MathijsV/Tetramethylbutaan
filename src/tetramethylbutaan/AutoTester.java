@@ -22,7 +22,7 @@ public class AutoTester
 				GabrielGraph gabrielGraph = (GabrielGraph) new TrainingSetReader("trainSets/train_set_" + String.format("%03d", i) + "_n" + n + "_err" + err + ".txt").getData();
 				gabrielGraph.createEdges();
 				//System.out.println("Editing graph...");
-				gabrielGraph.edit(GabrielGraph.EDIT_2ND_ORDER);
+				gabrielGraph.edit(GabrielGraph.EDIT_1ST_ORDER);
 				//System.out.println("Condensing graph...");
 				gabrielGraph.condense();
 				//System.out.println("Graph ready. Starting tests...");
