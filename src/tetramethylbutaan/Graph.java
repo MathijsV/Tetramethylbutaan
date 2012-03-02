@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -16,7 +15,8 @@ public abstract class Graph
 	public final static int EDIT_1ST_ORDER = 1, EDIT_2ND_ORDER = 2;
     public final static int K = 3;
     public final static int NUM_THREADS = 4;
-    private static Random random = new Random();
+    
+    private static int[] totalVotes = new int[Point.nrClasses+1];
 	
 	protected List<GraphPoint> points = new ArrayList<GraphPoint>();
     
@@ -113,6 +113,13 @@ public abstract class Graph
 
 	public void createEdges()
 	{
+		// Count all classes
+		totalVotes = new int[Point.nrClasses+1];
+		for(Point p : points)
+		{
+			totalVotes[p.getClassification()+1]++;
+		}
+		
         ExecutorService executor = Executors.newCachedThreadPool();
         for(int i = 0; i < NUM_THREADS; i++)
         {
@@ -144,29 +151,51 @@ public abstract class Graph
 	 */
 	public static int getFirstOrderClassification(List<GraphPoint> neighbours)
 	{
-		List<Integer> votes = new ArrayList<Integer>();
+		int votes[] = new int[Point.nrClasses+1];
 		
-		for(int i = 0; i < Point.nrClasses +1; i++)
-			votes.add(0);
-		
+		// Count the classes of all the neighbours
 		Iterator<GraphPoint> neighbourIterator = neighbours.iterator();
 		while(neighbourIterator.hasNext())
 		{
 			int classnr = neighbourIterator.next().getClassification();
-			votes.set(classnr+1, votes.get(classnr+1)+1);	//dit gaat mis als p.getClassification() < -1
+			votes[classnr+1] = votes[classnr+1] + 1;
 		}
 
+		// Build a list of possible classes
         List<Integer> possibleClasses = new ArrayList<Integer>();
-        int maxVotes = Collections.max(votes), counter = 0;
+        int maxVotes = 0, counter = 0;
+        
+        // Find the class with the most votes
+        for(int i = 0; i < (Point.nrClasses + 1); i++)
+        {
+        	if(votes[i] > maxVotes) maxVotes = votes[i];
+        }
 
+        // Find the class(es) with the most votes.
         for(Integer i : votes)
         {
             if(i == maxVotes)
                 possibleClasses.add(counter-1);
             counter++;
         }
-
-        return possibleClasses.get(random.nextInt(possibleClasses.size()));
+        
+        // If more than one class is possible, use the most common one
+        if(possibleClasses.size() == 1)
+        	return possibleClasses.get(0);
+        else
+        {
+        	int mostCommonClass = 0, mostCommonClassVotes = 0;
+        	for(Integer i : possibleClasses)
+        	{
+        		if(totalVotes[i+1] > mostCommonClassVotes)
+        		{
+        			mostCommonClassVotes = totalVotes[i+1];
+        			mostCommonClass = i;
+        		}
+        	}
+        	
+        	return mostCommonClass;
+        }
 	}
 	
 	/**

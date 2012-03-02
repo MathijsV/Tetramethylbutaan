@@ -11,16 +11,16 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		GabrielGraph gabrielGraph = (GabrielGraph) new TrainingSetReader("diabetes_train.txt").getData();
+		GabrielGraph gabrielGraph = (GabrielGraph) new TrainingSetReader("xor_train.txt").getData();
 		System.out.println("Creating edges...");
 		gabrielGraph.createEdges();
 		System.out.println("Editing graph...");
-		gabrielGraph.edit(Graph.EDIT_1ST_ORDER);
+		gabrielGraph.edit(Graph.EDIT_2ND_ORDER);
 		System.out.println("Condensing graph...");
 		gabrielGraph.condense();
 		
 		System.out.println("Collecting results...");
-        new TestSetReader("diabetes_test.txt", gabrielGraph);
+        new TestSetReader("xor_test.txt", gabrielGraph);
 
         try
         {
@@ -50,7 +50,7 @@ public class Main {
 		while(result.hasNext())
 			System.out.println(result.next());*/
 		//new TestSetReader("trainSets/train_set_001_n1000_err0.txt", gabrielGraph);*/
-		new GabrielVisualiser(gabrielGraph);
+		//new GabrielVisualiser(gabrielGraph);
 		/*try {
 			new AutoTester(100);
 		} catch (IOException e) {
