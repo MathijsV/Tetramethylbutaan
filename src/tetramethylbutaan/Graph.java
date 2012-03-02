@@ -83,7 +83,7 @@ public abstract class Graph
 		while(iter.hasNext())
 		{
 			GraphPoint point = iter.next();
-			if(p.equals(point)) return point.getClassification();
+			if(p == point) return point.getClassification();
 			if(isNeighbour(p, point))
             {
 				if(!neighbours.contains(point))

@@ -45,15 +45,15 @@ public class GraphPoint extends Point
     
 	public boolean hasEdgeWith(GraphPoint point)
 	{
-		return edges.contains(point);
-		/*for (GraphPoint p : edges)
+		//return edges.contains(point);
+		for (GraphPoint p : edges)
 		{
-			if (p.equals(point))
+			if (p == point)
 			{
 				return true;
 			}
 		}
-		return false;*/
+		return false;
 	}
 	
 	public List<GraphPoint> getEdges()

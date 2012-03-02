@@ -11,7 +11,7 @@ import java.util.Comparator;
  *
  * @author pbos
  */
-public class DistanceComparator implements Comparator
+public class DistanceComparator implements Comparator<Point>
 {
     private Point p;
 
@@ -20,13 +20,10 @@ public class DistanceComparator implements Comparator
         this.p = p;
     }
 
-    public int compare(Object o1, Object o2)
+    public int compare(Point p1, Point p2)
     {
-        Point p1 = (Point) o1;
-        Point p2 = (Point) o2;
-
-        double dist1 = p.euclidianDistance2(p1);
-        double dist2 = p.euclidianDistance2(p2);
+        double dist1 = p.euclideanDistance2(p1);
+        double dist2 = p.euclideanDistance2(p2);
 
         if(dist1 < dist2)
         {

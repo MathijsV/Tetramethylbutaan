@@ -15,14 +15,14 @@ public class GabrielGraph extends Graph
 
 	public boolean isNeighbour(GraphPoint p1, GraphPoint p2)
 	{
-		if (p1.equals(p2))
+		if (p1 == p2)
 			return false;
 		
 		for (Point point : points)
 		{
-			if (!point.equals(p1) && !point.equals(p2) &&
-					p1.euclidianDistance2(p2) >
-					p1.euclidianDistance2(point) + p2.euclidianDistance2(point))
+			if (point != p1 && point != p2 &&
+					p1.euclideanDistance2(p2) >
+					p1.euclideanDistance2(point) + p2.euclideanDistance2(point))
 			{
 				return false;
 			}

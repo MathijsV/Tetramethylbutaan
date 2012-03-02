@@ -21,8 +21,8 @@ public class RelatedNeighbourHoodGraph extends Graph
 		for (Point point : points)
 		{
 			if (!point.equals(p1) && !point.equals(p2) &&
-					Math.sqrt(p1.euclidianDistance2(p2)) >
-					Math.max(Math.sqrt(p1.euclidianDistance2(point)), Math.sqrt(p2.euclidianDistance2(point))))
+					Math.sqrt(p1.euclideanDistance2(p2)) >
+					Math.max(Math.sqrt(p1.euclideanDistance2(point)), Math.sqrt(p2.euclideanDistance2(point))))
 			{
 				return false;
 			}

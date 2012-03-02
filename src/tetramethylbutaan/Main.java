@@ -11,7 +11,7 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		GabrielGraph gabrielGraph = (GabrielGraph) new TrainingSetReader("xor_train.txt").getData();
+		GabrielGraph gabrielGraph = (GabrielGraph) new TrainingSetReader("mnist_train.txt").getData();
 		System.out.println("Creating edges...");
 		gabrielGraph.createEdges();
 		System.out.println("Editing graph...");
@@ -20,7 +20,7 @@ public class Main {
 		gabrielGraph.condense();
 		
 		System.out.println("Collecting results...");
-        new TestSetReader("xor_test.txt", gabrielGraph);
+        new TestSetReader("mnist_test.txt", gabrielGraph);
 
         try
         {
