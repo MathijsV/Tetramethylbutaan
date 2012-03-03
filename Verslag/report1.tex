@@ -50,12 +50,28 @@ TODO: \\
 Plaatje van gehele Relative Neighbourhood Graph uit GraphVisualiser\\
 Figuur 4\\
 
-Deze grafen kun je gebruiken om nieuwe data (de testset) te classificeren aan de hand van data waarvan de classificatie al bekend is (de trainset). Een graaf bevat in eerste instantie dus alle punten uit de trainset. Om de performance te verbeteren en eventuele ruis te compenseren, wordt condensing en editing toegepast. Hierbij wordt gekeken naar de punten die een verbinding hebben met een bepaald punt. Bij condensing wordt ieder punt weggehaald, dat alleen verbindingen naar punten met dezelfde klasse heeft. In het artikel werden twee soorten editing algoritmes besproken: een eerste orde editing algoritme en een tweede orde editing algoritme. Het eerste orde editing algoritme bepaald voor elk punt of de meerderheid van de buren van dat punt van een bepaalde, andere klasse is. De punten waarvoor dit geldt, worden verwijderd. Het tweede orde algoritme verwijderd alle punten waarvoor geldt dat de meerderheid van de buren van een bepaalde, andere klasse is, en als ook de meerderheid van de buren van die buren van een bepaalde, andere klasse is.
+Deze grafen kun je gebruiken om nieuwe data (de testset) te klassificeren aan de hand van data waarvan de classificatie al bekend is (de trainset). Een graaf bevat in eerste instantie dus alle punten uit de trainset. Om de performance te verbeteren en eventuele ruis te compenseren, wordt condensing en editing toegepast op de trainset. Hierbij wordt gekeken naar de punten die een verbinding hebben met een bepaald punt. Bij condensing wordt ieder punt weggehaald, dat alleen verbindingen naar punten met dezelfde klasse heeft. 
+In het artikel werden twee soorten editing algoritmes besproken: een eerste orde editing algoritme en een tweede orde editing algoritme. 
+Het eerste orde editing algoritme bepaald voor elk punt of de meerderheid van de buren van dat punt tot een van de andere klasses behoort. De punten waarvoor dit geldt, worden verwijderd. 
+Het tweede orde algoritme verwijderd alle punten als geldt dat de meerderheid van de buren tot een van de andere klasses behoort, en als ook de meerderheid van de buren, van de buren die van dezelfde klasse als dat punt zijn, tot een van de andere klasses behoort.
+
+De testset wordt geklassificeerd op de volgende manier: Eerst wordt de graaf van alle punten van de trainset  geconstrureerd. Vervolgens wordt eerste of tweede orde editing toegepast. Daarna wordt condensing toegepast. Met de bewerkte graaf die overblijft wordt een klasse aan elk van de punten in de testset toegewezen. Dit gebeurt behulp van het k-nearest neighbour algoritme. Van elk punt in de testset wordt gekeken welke k punten het dichtste bij liggen. Deze k dichtstbijzijnde punten bepalen we ofwel door alleen naar de directe buren van het testsetpunt te kijken (eerste orde), ofwel naar de directe buren en buren van die directe buren te kijken. Als k groter is dan het aantal buren dat het testsetpunt heeft, worden alleen die buren gebruikt, waardoor k voor dat punt dus minder is.
 
 \section{Experimenten}
 \emph{Report results of experiments with the selected method on the considered datasets, 
 in particular accuracy and storage reduction reduction. }\\
+
+We hebben onze methode met verschillende datasets getest\\ %hier opsomming van maken
+- de xor-dataset met 2 dimensies en 2 mogelijke klasses\\
+- de mnist-dataset met 196 dimensies en 10 mogelijke klasses\\
+- de diebetes-dataset met 8 dimensies en 2 mogelijke klasses\\
+
+\subsection{Xor}
+We hebben de gemiddelde nauwkeurigheid en reductie voor elke 'error-rate' bepaald, door het gemiddelde te nemen van de score van alle testsets (dat waren er 40), toegepast op alle trainsets (er waren 10 trainsets). Hierbij hebben we Gabriel Graphs gebruikt. We hebben deze tests gedaan voor eerste orde en tweede orde editing, in combinatie met eerste orde en tweede orde k-nearest-neighbour. Hieronder staat de testresultaten weergegeven in een tabel en daarbij twee grafieken die de resultaten uit de tabel weergeven.
+
 \emph{Discuss the performance of the selected method.}\\
+
+
 
 \section{Conclusie}
 \emph{Summarize the content of your report and provide some conclusive remarks and observation about the effectiveness of the selected method and possible future work (improvements).} \\

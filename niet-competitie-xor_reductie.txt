@@ -1,0 +1,16 @@
+reductie voor niet-competitie xor,  0% t/m 40% ruis
+
+2e orde:
+69,7
+59,300000000000004
+54,6
+56,0
+50,0
+
+1e orde:
+75,6
+73,1
+74,9
+75,9
+70,9
+ % reductie, 0% t/m 40% ruis
