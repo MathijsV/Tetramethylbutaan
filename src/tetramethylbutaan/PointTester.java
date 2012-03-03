@@ -41,7 +41,8 @@ public class PointTester implements Runnable
             List<GraphPoint> neighbours = new ArrayList<GraphPoint>();
             GraphPoint p = testPoint.next();
 
-            Iterator<GraphPoint> iter = graph.getPoints().iterator();
+            results.add(graph.test(p));
+            /*Iterator<GraphPoint> iter = graph.getPoints().iterator();
             while(iter.hasNext())
             {
                 GraphPoint point = iter.next();
@@ -62,12 +63,12 @@ public class PointTester implements Runnable
                         {
                             neighbours.add(neighbour);
                         }
-                    }*/
+                    }*//*
                 }
             }
 
             Collections.sort(neighbours, new DistanceComparator(p));
-            results.add(Graph.getFirstOrderClassification(neighbours.subList(0, (Math.min(Graph.K, neighbours.size())))));
+            results.add(Graph.getFirstOrderClassification(neighbours.subList(0, (Math.min(Graph.K, neighbours.size())))));*/
         }
     }
 

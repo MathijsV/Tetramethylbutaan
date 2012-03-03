@@ -25,7 +25,7 @@ public class Main {
         try
         {
             // Create file
-            FileWriter fstream = new FileWriter("testResults/prototypes.txt");
+            FileWriter fstream = new FileWriter("testResults/prototypes2ndorder.txt");
             BufferedWriter out = new BufferedWriter(fstream);
 
             for(GraphPoint p : gabrielGraph.getPoints())

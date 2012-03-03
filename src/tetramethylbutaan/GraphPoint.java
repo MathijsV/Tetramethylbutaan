@@ -22,13 +22,13 @@ public class GraphPoint extends Point
 		super();
 	}
 	
-	public void addEdge(GraphPoint p)
+	public synchronized void addEdge(GraphPoint p)
 	{
 		edges.add(p);
 		p.edges.add(this);
 	}
 	
-	public void copyEdge(GraphPoint p)
+	public synchronized void copyEdge(GraphPoint p)
 	{
 		if(!hasEdgeWith(p) && !p.hasEdgeWith(this))
 		{
@@ -43,17 +43,14 @@ public class GraphPoint extends Point
         return edges;
     }*/
     
-	public boolean hasEdgeWith(GraphPoint point)
+	public synchronized boolean hasEdgeWith(GraphPoint point)
 	{
-		//return edges.contains(point);
-		for (GraphPoint p : edges)
-		{
+		return edges.contains(point);
+		/*for (GraphPoint p : edges)
 			if (p == point)
-			{
 				return true;
-			}
-		}
-		return false;
+		return false;*/
+		// Het deel in commentaar veroorzaakt vreemd genoeg een concurrentmodificationexception.
 	}
 	
 	public List<GraphPoint> getEdges()
@@ -61,7 +58,7 @@ public class GraphPoint extends Point
 		return edges;
 	}
 	
-	public boolean removeEdge(GraphPoint p)
+	public synchronized boolean removeEdge(GraphPoint p)
 	{
 		return edges.remove(p);
 		/*if(hasEdgeWith(p))
@@ -74,7 +71,7 @@ public class GraphPoint extends Point
 			return false;*/
 	}
 
-    void removeEdges()
+    public synchronized void removeEdges()
     {
         edges = new ArrayList<GraphPoint>();
     }

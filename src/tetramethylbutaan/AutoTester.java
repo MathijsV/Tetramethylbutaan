@@ -10,6 +10,8 @@ public class AutoTester
 	public AutoTester(int n) throws IOException
 	{
 		System.out.println("Starting tests with n = " + n);
+		int total[] = new int[5];
+		int wrong[] = new int[5];
 
 		for(int i = 1; i <= 10; i++)
 		{			
@@ -22,7 +24,7 @@ public class AutoTester
 				GabrielGraph gabrielGraph = (GabrielGraph) new TrainingSetReader("trainSets/train_set_" + String.format("%03d", i) + "_n" + n + "_err" + err + ".txt").getData();
 				gabrielGraph.createEdges();
 				//System.out.println("Editing graph...");
-				gabrielGraph.edit(GabrielGraph.EDIT_1ST_ORDER);
+				gabrielGraph.edit(GabrielGraph.EDIT_2ND_ORDER);
 				//System.out.println("Condensing graph...");
 				gabrielGraph.condense();
 				//System.out.println("Graph ready. Starting tests...");
@@ -40,19 +42,25 @@ public class AutoTester
 		            for(; scan.hasNext() && results.hasNext(); num++)
 		            {
 		            	numTotal++;
+		            	total[err/10]++;
 		            	String classification = scan.next();
 		            	if(Double.parseDouble(classification) != results.next())
 		            	{
 		            		numWrong++;
 		            		numWrongTotal++;
+		            		wrong[err/10]++;
 		            	}
 		            }
 		            file.close();
 		            //System.out.println("Test complete. Items tested: " + num + ", wrong predictions: " + numWrong + " (" + ((double) numWrong / num) * 100 + "%)");
 				}
-				
-				System.out.println("Set " + i + ", error rate " + err + ": " + ((double) numWrongTotal / numTotal) * 100 + "% wrongly predicted on average");
 			}
+		}
+		
+		for(int i = 0; i < 5; i++)
+		{
+			String percentage = String.valueOf(100-(((double) wrong[i] / total[i]) * 100));
+			System.out.println(percentage.replace('.', ','));
 		}
 	}
 }

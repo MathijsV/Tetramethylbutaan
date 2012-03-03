@@ -79,7 +79,7 @@ public class TestSetReader
         try
         {
             // Create file
-            FileWriter fstream = new FileWriter("testResults/classes.txt");
+            FileWriter fstream = new FileWriter("testResults/classes2ndorder.txt");
             out = new BufferedWriter(fstream);
         }
         catch (Exception ex)
