@@ -1,0 +1,22 @@
+Diabetes
+1ST order editing, 1ST order neighbour testing, K = 1:
+Accuracy 78,9%; Reductie 49,2%
+1ST order editing, 1ST order neighbour testing, K = 3:
+Accuracy 78,1%; Reductie 49,2%
+1ST order editing, 1ST order neighbour testing, K = 5:
+Accuracy 77,3%; Reductie 49,2%
+1ST order editing, 2ND order neighbour testing, K = 3:
+Accuracy 78,1%; Reductie 49,2%
+1ST order editing, 2ND order neighbour testing, K = 5:
+Accuracy 78,1%; Reductie 49,2%
+
+2ND order editing, 1ST order neighbour testing, K = 1:
+Accuracy 73,4%; Reductie 37,5%
+2ND order editing, 1ST order neighbour testing, K = 3:
+Accuracy 78,9%; Reductie 37,5%
+2ND order editing, 1ST order neighbour testing, K = 5:
+Accuracy 79,7%; Reductie 37,5%
+2ND order editing, 2ND order neighbour testing, K = 3:
+Accuracy 78,1%; Reductie 37,5%
+2ND order editing, 2ND order neighbour testing, K = 5:
+Accuracy 78,9%; Reductie 37,5%

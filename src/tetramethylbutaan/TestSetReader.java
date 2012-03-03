@@ -20,7 +20,7 @@ public class TestSetReader
 	private List<Integer> results = new ArrayList<Integer>();
     private final static int NUM_THREADS = 4;
 	
-	public TestSetReader(String fileName, Graph g)
+	public TestSetReader(String fileName, Graph g, String writeFile)
     {
         int num = 0;
         try
@@ -79,7 +79,7 @@ public class TestSetReader
         try
         {
             // Create file
-            FileWriter fstream = new FileWriter("testResults/classes.txt");
+            FileWriter fstream = new FileWriter(writeFile);
             out = new BufferedWriter(fstream);
         }
         catch (Exception ex)

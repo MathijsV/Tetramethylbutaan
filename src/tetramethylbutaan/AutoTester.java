@@ -24,7 +24,7 @@ public class AutoTester
 				GabrielGraph gabrielGraph = (GabrielGraph) new TrainingSetReader("trainSets/train_set_" + String.format("%03d", i) + "_n" + n + "_err" + err + ".txt").getData();
 				gabrielGraph.createEdges();
 				//System.out.println("Editing graph...");
-				gabrielGraph.edit(GabrielGraph.EDIT_1ST_ORDER);
+				gabrielGraph.edit(GabrielGraph.EDIT_2ND_ORDER);
 				//System.out.println("Condensing graph...");
 				gabrielGraph.condense();
 				//System.out.println("Graph ready. Starting tests...");
@@ -33,7 +33,7 @@ public class AutoTester
 				{
 					//System.out.println("Testing set " + j);
 					//System.out.print(j + " ");
-					Iterator<Integer> results = new TestSetReader("testSets/test_data_" + String.format("%03d", j) + "_n" + n + ".txt", gabrielGraph)
+					Iterator<Integer> results = new TestSetReader("testSets/test_data_" + String.format("%03d", j) + "_n" + n + ".txt", gabrielGraph, "testResults/classes.txt")
 													.getResults().iterator();
 					
 					FileReader file = new FileReader("testSets/test_label_" + String.format("%03d", j) + "_n" + n + ".txt");
