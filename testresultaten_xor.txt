@@ -1,0 +1,22 @@
+XOR
+1ST order editing, 1ST order neighbour testing, K = 1:
+Accuracy 64,0%; Reductie 65,0%
+1ST order editing, 1ST order neighbour testing, K = 3:
+Accuracy 62,0%; Reductie 65,0%
+1ST order editing, 1ST order neighbour testing, K = 5:
+Accuracy 56,0%; Reductie 65,0%
+2ND order editing, 1ST order neighbour testing, K = 1:
+Accuracy 70,0%; Reductie 47,0%
+2ND order editing, 1ST order neighbour testing, K = 3:
+Accuracy 70,0%; Reductie 47,0%
+2ND order editing, 1ST order neighbour testing, K = 5:
+
+Accuracy 66,0%; Reductie 47,0%
+2ND order editing, 2ND order neighbour testing, K = 3:
+Accuracy 70,0%; Reductie 47,0%
+2ND order editing, 2ND order neighbour testing, K = 5:
+Accuracy 74,0%; Reductie 47,0%
+1ST order editing, 2ND order neighbour testing, K = 3:
+Accuracy 62,0%; Reductie 65,0%
+1ST order editing, 2ND order neighbour testing, K = 5:
+Accuracy 62,0%; Reductie 65,0%

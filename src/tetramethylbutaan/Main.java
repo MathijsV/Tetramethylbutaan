@@ -20,11 +20,11 @@ public class Main {
 		gabrielGraph.condense();
 		
 		System.out.println("Collecting results...");
-        new TestSetReader("mnist_test.txt", gabrielGraph, "testResults/classes_k1_2ndorderedit_2ndordertest.txt");
+        new TestSetReader("mnist_test.txt", gabrielGraph, "testResults/classes_k1_2ndorderedit_1stordertest.txt");
         gabrielGraph.K = 3;
-        new TestSetReader("mnist_test.txt", gabrielGraph, "testResults/classes_k3_2ndorderedit_2ndordertest.txt");
+        new TestSetReader("mnist_test.txt", gabrielGraph, "testResults/classes_k3_2ndorderedit_1stordertest.txt");
         gabrielGraph.K = 5;
-        new TestSetReader("mnist_test.txt", gabrielGraph, "testResults/classes_k5_2ndorderedit_2ndordertest.txt");
+        new TestSetReader("mnist_test.txt", gabrielGraph, "testResults/classes_k5_2ndorderedit_1stordertest.txt");
         try
         {
             // Create file

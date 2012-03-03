@@ -86,16 +86,16 @@ public abstract class Graph
 			if(p.equals(point)) return point.getClassification();
 			if(isNeighbour(p, point))
             {
-				if(!neighbours.contains(point))
+				//if(!neighbours.contains(point))
 					neighbours.add(point);
 
-                for(GraphPoint neighbour : point.getEdges())
+                /*for(GraphPoint neighbour : point.getEdges())
                 {
                     if(neighbour != p && !neighbours.contains(neighbour))
                     {
                         neighbours.add(neighbour);
                     }
-                }
+                }*/
             }
 		}
 

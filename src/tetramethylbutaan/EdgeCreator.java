@@ -35,7 +35,7 @@ public class EdgeCreator implements Runnable
         }
 
         int num = 0;
-        for (int i = 0; i < points.size() && pointIt.hasNext(); i += modulo)
+        for (int i = start; i < points.size(); i += modulo)
 		{
             num++;
             
