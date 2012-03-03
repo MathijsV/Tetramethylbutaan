@@ -1,0 +1,28 @@
+MNIST
+1ST order editing, 1ST order neighbour testing, K = 1:
+Accuracy 71,8%; Reductie 89,3%
+1ST order editing, 1ST order neighbour testing, K = 3:
+Accuracy 68,6%; Reductie 89,3%
+1ST order editing, 1ST order neighbour testing, K = 5:
+Accuracy 62,0%; Reductie 89,3%
+
+1ST order editing, 2ND order neighbour testing, K = 1:
+Accuracy 71,8%; Reductie 89,3%
+1ST order editing, 2ND order neighbour testing, K = 3:
+Accuracy 69,0%; Reductie 89,3%
+1ST order editing, 2ND order neighbour testing, K = 5:
+Accuracy 64,4%; Reductie 89,3%
+
+2ND order editing, 1ST order neighbour testing, K = 1:
+Accuracy 67,6%; Reductie 78,8%
+2ND order editing, 1ST order neighbour testing, K = 3:
+Accuracy 60,4%; Reductie 78,8%
+2ND order editing, 1ST order neighbour testing, K = 5:
+Accuracy 52,8%; Reductie 78,8%
+
+2ND order editing, 2ND order neighbour testing, K = 1:
+Accuracy 67,6%; Reductie 78,8%
+2ND order editing, 2ND order neighbour testing, K = 3:
+Accuracy 60,4%; Reductie 78,8%
+2ND order editing, 2ND order neighbour testing, K = 5:
+Accuracy 54,6%; Reductie 78,8%
