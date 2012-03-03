@@ -15,7 +15,7 @@ public class TrainingSetReader
         {
             FileReader file = new FileReader(fileName);
             Scanner scan = new Scanner(file);
-            for ( ; scan.hasNext()/* && nrPoints < 1801*/; nrPoints += 1)
+            for ( ; scan.hasNext() && nrPoints < 200; nrPoints += 1)
             {
             	double[] features = new double[GraphPoint.nrDimensions];
             	for (int i = 0; i < Point.nrDimensions; i += 1)

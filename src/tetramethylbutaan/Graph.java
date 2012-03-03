@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 public abstract class Graph
 {
 	public final static int EDIT_1ST_ORDER = 1, EDIT_2ND_ORDER = 2;
-    public final static int K = 3;
+    public final static int K = 5;
     public final static int NUM_THREADS = 4;
     
     private static int[] totalVotes = null;
@@ -213,7 +213,7 @@ public abstract class Graph
 			{
 				for(GraphPoint edge: neighbour.getEdges())
 				{
-					if(!neighbourhood.contains(edge) && !p.getEdges().contains(edge))
+					if(edge != neighbour && !neighbourhood.contains(edge))
 						neighbourhood.add(edge);
 				}
 			}
@@ -246,10 +246,10 @@ public abstract class Graph
 				{
 					if(editOrder == EDIT_1ST_ORDER || getSecondOrderClassification(p) != p.getClassification())
 					{
-						List<GraphPoint> edges = p.getEdges();
+						/*List<GraphPoint> edges = p.getEdges();
 						Iterator<GraphPoint> edgeIterator = edges.iterator();
 						while(edgeIterator.hasNext())
-							edgeIterator.next().removeEdge(p);
+							edgeIterator.next().removeEdge(p);*/
                         removePoints.add(p);
 					}
 				}
@@ -260,46 +260,27 @@ public abstract class Graph
            // points.removeAll(removePoints);
             Iterator<GraphPoint> removeIt = removePoints.iterator();
             Iterator<GraphPoint> allPointsIt = points.iterator();
-            
-
-            int outputCounter = 0;    // for testing only
-            int showOutputCounter = 1;// for testing only
 
             while (removeIt.hasNext())
             {
-                Point pointToRemove = removeIt.next();
-                while (allPointsIt.next() != pointToRemove);
-                allPointsIt.remove();
+                GraphPoint pointToRemove = removeIt.next();
+                GraphPoint lastPoint = allPointsIt.next();
 
-                //for testing only
-                outputCounter++;
-                if (outputCounter == showOutputCounter)
+                // Loop through the points until we encounter a point that needs to be removed
+                while (lastPoint != pointToRemove)
                 {
-                    //System.out.println (outputCounter + " point removed");
-                    showOutputCounter*=2;
-                    showOutputCounter = Math.min(outputCounter, 50);
+                    lastPoint = allPointsIt.next();
                 }
+
+                // Remove the edges between the point and its neighbours
+                List<GraphPoint> neighbours = lastPoint.getEdges();
+                Iterator<GraphPoint> neighbourIterator = neighbours.iterator();
+    			while(neighbourIterator.hasNext())
+    				neighbourIterator.next().removeEdge(lastPoint);
+
+                // Remove the point
+                allPointsIt.remove();
             }
-            /*
-            GraphPoint pointToRemove;
-            if(removeIt.hasNext())
-            {
-                while(allPointsIt.hasNext())
-                {
-                    GraphPoint p = allPointsIt.next();
-                    if(p == pointToRemove)
-                    {
-                        allPointsIt.remove();
-                        if(removeIt.hasNext())
-                        {
-                            pointToRemove = removeIt.next();
-                        }
-                        else
-                            break;
-                    }
-                }
-             }
-             */
             
             removeEdges();
             createEdges();
