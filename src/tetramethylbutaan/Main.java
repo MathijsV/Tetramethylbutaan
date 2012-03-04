@@ -13,8 +13,36 @@ public class Main
 	 */
 	public static void main(String[] args)
 	{
-		String dataType = "mnist";
-		new Main().trainingSetTest(dataType + "_train.txt", new RelatedNeighbourHoodGraph(), 0.8);
+		new Main();
+	}
+	
+	public Main()
+	{
+		for (int K = 1; K <= 5; K +=2)
+		{
+			Graph.K = K;
+			for (String dataType : new String[]{"xor", "diabetes", "mnist"})
+			{
+				setDimensions(dataType);
+				for (int order = Graph.EDIT_1ST_ORDER; order <= Graph.EDIT_2ND_ORDER; order++)
+				{
+					System.out.println("\n" + dataType + ", order " + order + ", K = " + K + ":");
+					trainingSetTest(dataType + "_train.txt", new RelatedNeighbourHoodGraph(), order, 0.8);
+				}
+			}
+		}
+		//customTest();
+		//autoTest();
+	}
+	
+	private void setDimensions(String dataType)
+	{
+		if (dataType.equals("xor" ))
+			Point.nrDimensions = 2;
+		else if (dataType.equals("diabetes"))
+			Point.nrDimensions = 8;
+		else if (dataType.equals("mnist"))
+			Point.nrDimensions = 196;
 	}
 	
 	/**
@@ -24,13 +52,13 @@ public class Main
 	 * @param fraction how much data should be used to construct the training set, between 0 and 1.
 	 * the rest of the data will be used to test.
 	 */
-	private void trainingSetTest(String filename, Graph graph, double fraction)
+	private void trainingSetTest(String filename, Graph graph, int order, double fraction)
 	{
 		TrainingSetReader reader = new TrainingSetReader(filename, graph, fraction, false);
 		List<GraphPoint> testSet = reader.getTestSet();
 		
 		double sizeBefore = (double) graph.getPoints().size();
-		constructGraph(graph);
+		constructGraph(graph, order, false);
 		double reduction = (double) graph.getPoints().size() / sizeBefore;
 		
 		int nrTests = testSet.size();
@@ -45,22 +73,30 @@ public class Main
 		System.out.println(100.0 * reduction + "% reduction");
 	}
 	
-	private void constructGraph(Graph graph)
+	private void constructGraph(Graph graph, int order)
 	{
-		System.out.println("Creating edges...");
+		constructGraph(graph, order, true);
+	}
+	
+	private void constructGraph(Graph graph, int order, boolean printStatus)
+	{
+		if (printStatus)
+			System.out.println("Creating edges...");
 		graph.createEdges();
-		System.out.println("Editing graph...");
-		graph.edit(Graph.EDIT_1ST_ORDER);
-		System.out.println("Condensing graph...");
+		if (printStatus)
+			System.out.println("Editing graph...");
+		graph.edit(order);
+		if (printStatus)
+			System.out.println("Condensing graph...");
 		graph.condense();
 	}
 	
 	private void customTest()
 	{
-		String fileType = "diabetes";
+		String fileType = "mnist";
 		
 		Graph graph = new TrainingSetReader(fileType + "_train.txt", new RelatedNeighbourHoodGraph()).getData();
-		constructGraph(graph);
+		constructGraph(graph, Graph.EDIT_1ST_ORDER);
 		
 		String testFile = fileType + "_test.txt";
 		System.out.println("Collecting results...");
