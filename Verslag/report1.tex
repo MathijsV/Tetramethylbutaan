@@ -144,19 +144,21 @@ Gem. tot 20\% ruis &	87,9575 &	86,92583333 &	85,04916667 \\ \hline
 \begin{center} \includegraphics[scale=0.7]{xor_2ndordedit_2ndordtest_lijn} \end{center}
 \begin{center} \includegraphics[scale=0.7]{xor_2ndordedit_2ndordtest_staaf} \end{center}
 
-%reductie nog erbij
+\subsubsection{Reductie}
+\begin{tabular}{|c|c|c|c|c|c|}  \hline
+&	0\% &	10\% & 	20\%	 & 30\%	 & 40\% \\ \hline
+2nd order editing &	69,7 &	59,3 &	54,6 & 	56 &	50 \\
+1st order editing &	75,6 &	73,1 &	74,9 &	75,9 &	70,9 \\ \hline
+\end{tabular} \\
+\begin{center} \includegraphics[scale=0.7]{xor_reduction} \end{center}
 
-\subsubsection{Conclusie XOR}
-
+\subsubsection{Conclusies}
 Nauwkeurigheid van het klassificeren: \\
 Uit de staaf grafieken blijkt dat voor de xor-dataset gemiddeld het beste k=1 gebruikt kan worden voor het k-nearest-neighbour algoritme, als er weinig ruis in de dataset zit.  Als er veel ruis in de dataset zit, levert k=5 gemiddeld een zelfde of beter resultaat.
 Eerste orde editing levert gemiddeld een iets beter resultaat, vooral voor k=1. De orde van testen heeft niet zo veel invloed, dit kan misschien verklaard worden doordat het aantal buren van een punt vaak groter is dan k, waardoor tweede orde testen ook alleen tests doet met alleen de directe buren.\\
 
 Reductie van het aantal punten in de trainset: \\
-
-%conclusie reductie
-
-
+Zeker bij meer ruis, verwijderd eerste orde editing meer punten. Dat is ook wel logisch, want tweede orde editing test of het punt verwijderd zou worden met eerste orde editing, waarna het punt niet altijd verwijderd wordt als eerste orde editing dat zou ddoen, door de extra conditie van tweede orde editing.
 
 \subsection{MNIST}
 
