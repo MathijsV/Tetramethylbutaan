@@ -16,11 +16,11 @@ import java.util.List;
  */
 public class PointTester implements Runnable
 {
-    private GabrielGraph graph;
+    private Graph graph;
     private List<GraphPoint> testPoints;
     private List<Integer> results;
 
-    public PointTester(GabrielGraph graph, List<GraphPoint> testPoints)
+    public PointTester(Graph graph, List<GraphPoint> testPoints)
     {
         this.graph = graph;
         this.testPoints = testPoints;

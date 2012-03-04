@@ -4,34 +4,78 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 
-public class Main {
-
+public class Main
+{
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
-		GabrielGraph gabrielGraph = (GabrielGraph) new TrainingSetReader("mnist_train.txt").getData();
-		System.out.println("Creating edges...");
-		gabrielGraph.createEdges();
-		System.out.println("Editing graph...");
-		gabrielGraph.edit(Graph.EDIT_2ND_ORDER);
-		System.out.println("Condensing graph...");
-		gabrielGraph.condense();
+	public static void main(String[] args)
+	{
+		String dataType = "mnist";
+		new Main().trainingSetTest(dataType + "_train.txt", new RelatedNeighbourHoodGraph(), 0.8);
+	}
+	
+	/**
+	 * tests on a given training set and prints the results
+	 * @param filename the training set
+	 * @param graph the graph to test on, empty graph expected
+	 * @param fraction how much data should be used to construct the training set, between 0 and 1.
+	 * the rest of the data will be used to test.
+	 */
+	private void trainingSetTest(String filename, Graph graph, double fraction)
+	{
+		TrainingSetReader reader = new TrainingSetReader(filename, graph, fraction, false);
+		List<GraphPoint> testSet = reader.getTestSet();
 		
+		double sizeBefore = (double) graph.getPoints().size();
+		constructGraph(graph);
+		double reduction = (double) graph.getPoints().size() / sizeBefore;
+		
+		int nrTests = testSet.size();
+		int nrCorrect = 0;
+		for (GraphPoint point : testSet)
+		{
+			int classification = point.getClassification();
+			if (classification == graph.test(point))
+				nrCorrect++;
+		}
+		System.out.println((100.0 * (double)nrCorrect/(double)nrTests) + "% correct");
+		System.out.println(100.0 * reduction + "% reduction");
+	}
+	
+	private void constructGraph(Graph graph)
+	{
+		System.out.println("Creating edges...");
+		graph.createEdges();
+		System.out.println("Editing graph...");
+		graph.edit(Graph.EDIT_1ST_ORDER);
+		System.out.println("Condensing graph...");
+		graph.condense();
+	}
+	
+	private void customTest()
+	{
+		String fileType = "diabetes";
+		
+		Graph graph = new TrainingSetReader(fileType + "_train.txt", new RelatedNeighbourHoodGraph()).getData();
+		constructGraph(graph);
+		
+		String testFile = fileType + "_test.txt";
 		System.out.println("Collecting results...");
-        new TestSetReader("mnist_test.txt", gabrielGraph, "testResults/classes_k1_2ndorderedit_1stordertest.txt");
-        gabrielGraph.K = 3;
-        new TestSetReader("mnist_test.txt", gabrielGraph, "testResults/classes_k3_2ndorderedit_1stordertest.txt");
-        gabrielGraph.K = 5;
-        new TestSetReader("mnist_test.txt", gabrielGraph, "testResults/classes_k5_2ndorderedit_1stordertest.txt");
+        new TestSetReader(testFile, graph, "testResults/classes_k1_2ndorderedit_1stordertest.txt");
+        graph.K = 3;
+        new TestSetReader(testFile, graph, "testResults/classes_k3_2ndorderedit_1stordertest.txt");
+        graph.K = 5;
+        new TestSetReader(testFile, graph, "testResults/classes_k5_2ndorderedit_1stordertest.txt");
         try
         {
             // Create file
             FileWriter fstream = new FileWriter("testResults/prototypes_2ndorderedit.txt");
             BufferedWriter out = new BufferedWriter(fstream);
 
-            for(GraphPoint p : gabrielGraph.getPoints())
+            for(GraphPoint p : graph.getPoints())
             {
                 double[] features = p.getFeatures();
                 for(int i = 0; i < features.length; i++)
@@ -48,19 +92,18 @@ public class Main {
         {
             System.err.println("Error: " + ex.getMessage());
         }
-
-
-		/*Iterator<Integer> result = new TestSetReader("mnist_train.txt", gabrielGraph).getResults().iterator();
+		
+		
+        /*
+		Iterator<Integer> result = new TestSetReader("mnist_train.txt", gabrielGraph).getResults().iterator();
 		while(result.hasNext())
 			System.out.println(result.next());*/
 		//new TestSetReader("trainSets/train_set_001_n1000_err0.txt", gabrielGraph);*/
 		//new GabrielVisualiser(gabrielGraph);
-		/*try {
-			new AutoTester(100);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
 	}
-
+	
+	private void autoTest()
+	{
+		new AutoTester();
+	}
 }

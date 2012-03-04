@@ -55,7 +55,7 @@ public class TestSetReader
 
         for(int i = 0 ; i < NUM_THREADS; i++)
         {
-            PointTester pt = new PointTester((GabrielGraph) g, pointsToTest.subList(i*(pointsToTest.size() / NUM_THREADS), (i+1)*(pointsToTest.size() / NUM_THREADS)));
+            PointTester pt = new PointTester(g, pointsToTest.subList(i*(pointsToTest.size() / NUM_THREADS), (i+1)*(pointsToTest.size() / NUM_THREADS)));
             testers.add(pt);
             executor.execute(pt);
         }
@@ -91,15 +91,15 @@ public class TestSetReader
         for(PointTester t : testers)
         {
             Iterator<Integer> i1 = t.getResults().iterator();
-            while(i1.hasNext()/* && e.hasNext()*/)
+            while(i1.hasNext() /*&& e.hasNext()*/)
             {
                 try
                 {
                     int classification = i1.next();
                     results.add(classification);
                     out.write(classification + "\n");
-                    /*if (classification != e.next())
-                        numWrong++;*/
+                    //if (classification != e.next())
+                    //    numWrong++;
                 }
                 catch (IOException ex)
                 {
