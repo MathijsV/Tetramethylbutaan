@@ -38,20 +38,11 @@ public class Main
 	private void setDimensions(String dataType)
 	{
 		if (dataType.equals("xor"))
-		{
 			Point.nrDimensions = 2;
-			Point.nrClasses = 2;
-		}
 		else if (dataType.equals("diabetes"))
-		{
 			Point.nrDimensions = 8;
-			Point.nrClasses = 2;
-		}
 		else if (dataType.equals("mnist"))
-		{
 			Point.nrDimensions = 196;
-			Point.nrClasses = 10;
-		}
 	}
 	
 	/**
