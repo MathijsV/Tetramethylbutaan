@@ -4,5 +4,12 @@
 \contentsline {subsection}{\numberline {2.1}Condensing en editing}{2}
 \contentsline {subsection}{\numberline {2.2}De methode}{3}
 \contentsline {section}{\numberline {3}Experimenten}{5}
-\contentsline {subsection}{\numberline {3.1}Xor}{5}
-\contentsline {section}{\numberline {4}Conclusie}{5}
+\contentsline {subsection}{\numberline {3.1}XOR}{5}
+\contentsline {subsubsection}{\numberline {3.1.1}Eerste orde editing, eerste orde tests}{6}
+\contentsline {subsubsection}{\numberline {3.1.2}Tweede orde editing, eerste orde tests}{7}
+\contentsline {subsubsection}{\numberline {3.1.3}Eerste orde editing, tweede orde tests}{9}
+\contentsline {subsubsection}{\numberline {3.1.4}Tweede orde editing, tweede orde tests}{10}
+\contentsline {subsubsection}{\numberline {3.1.5}Conclusie XOR}{12}
+\contentsline {subsection}{\numberline {3.2}MNIST}{12}
+\contentsline {subsection}{\numberline {3.3}Diabetes}{12}
+\contentsline {section}{\numberline {4}Conclusie}{12}

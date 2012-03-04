@@ -34,17 +34,28 @@ Voor zowel condensing als editing kan de precieze werking verschillen. Het is af
 \subsection{De methode}
 De titel van het artikel dat wij gekozen hebben is: “Prototype selection for the nearest neighbour rulethrough proximity graphs”. We hebben dit artikel gekozen omdat het ons wel leuk leek om grafen te gebruiken en omdat het artikel duidelijk was. Er worden twee soorten grafen beschreven: ‘Gabriel Graphs’ en ‘Relative Neighbourhood Graph’. Beiden zijn grafen waarin punten verbonden worden door lijnen die elkaar niet snijden. Als een punt A verbonden is met punt B, is A een buur van B en B een buur van A.\\
 
-In een Gabriel Graph is er een verbinding tussen twee punten, als binnen de cirkel, waarvan de verbinding de diameter is, geen andere punten liggen. Met de euclidische afstand kan dit formeel uitgedrukt worden: A en B hebben een verbinding als voor alle andere punten X: afstand2(A,B)<= afstand2(A,X) + afstand2(B,X). In figuur 1 zijn A en B verbonden, maar B en C niet. In figuur 2 is een gehele Gabriel Graph te zien. \\
+In een Gabriel Graph is er een verbinding tussen twee punten, als binnen de cirkel, waarvan de verbinding de diameter is, geen andere punten liggen. Met de euclidische afstand kan dit formeel uitgedrukt worden: A en B hebben een verbinding als voor alle andere punten X: afstand2(A,B)<= afstand2(A,X) + afstand2(B,X). In Figuur \ref{GGburen} zijn A en B verbonden, maar B en C niet. In figuur 2 is een gehele Gabriel Graph te zien. \\
 
-\begin{center} \includegraphics[keepaspectratio=true]{GGburen} \emph{Figuur 1} \end{center}
+
+\begin{figure}[h!]
+    \centering
+        \includegraphics[scale=1, page=1]{GGburen}
+    \caption{Buren van punten in een Gabriel Graph}
+    \label{GGburen}
+\end{figure}
 
 TODO: \\
 Plaatje van gehele Gabriel Graph uit GraphVisualiser\\
 Figuur  2\\
 
-In een Relative Neighbourhood Graph hebben twee punten een verbinding als er geen andere punten binnen de ‘lune’ van die twee punten liggen, zie figuur 3. Met de euclidische afstand kan dit formeel uitgedrukt worden: A en B hebben een verbinding als voor alle andere punten X:  afstand(A,B) <= max\{afstand(A,X),afstand(B,X)\}. In figuur 3 zijn B en C  verbonden, maar A en B niet. In figuur 4 is een gehele Relative Neighbourhood Graph te zien.\\
+In een Relative Neighbourhood Graph hebben twee punten een verbinding als er geen andere punten binnen de ‘lune’ van die twee punten liggen, zie figuur 3. Met de euclidische afstand kan dit formeel uitgedrukt worden: A en B hebben een verbinding als voor alle andere punten X:  afstand(A,B) <= max\{afstand(A,X),afstand(B,X)\}. In Figuur \ref{RNGburen} zijn B en C  verbonden, maar A en B niet. In figuur 4 is een gehele Relative Neighbourhood Graph te zien.\\
 
-\begin{center} \includegraphics[keepaspectratio=true]{RNGburen} \emph{Figuur 3} \end{center}
+\begin{figure}[h!]
+    \centering
+        \includegraphics[scale=1, page=1]{RNGburen}
+    \caption{Buren van punten in een Relative Neighbourhood Graph}
+    \label{RNGburen}
+\end{figure}
 
 TODO: \\
 Plaatje van gehele Relative Neighbourhood Graph uit GraphVisualiser\\
@@ -53,7 +64,7 @@ Figuur 4\\
 Deze grafen kun je gebruiken om nieuwe data (de testset) te klassificeren aan de hand van data waarvan de classificatie al bekend is (de trainset). Een graaf bevat in eerste instantie dus alle punten uit de trainset. Om de performance te verbeteren en eventuele ruis te compenseren, wordt condensing en editing toegepast op de trainset. Hierbij wordt gekeken naar de punten die een verbinding hebben met een bepaald punt. Bij condensing wordt ieder punt weggehaald, dat alleen verbindingen naar punten met dezelfde klasse heeft. 
 In het artikel werden twee soorten editing algoritmes besproken: een eerste orde editing algoritme en een tweede orde editing algoritme. 
 Het eerste orde editing algoritme bepaald voor elk punt of de meerderheid van de buren van dat punt tot een van de andere klasses behoort. De punten waarvoor dit geldt, worden verwijderd. 
-Het tweede orde algoritme verwijderd alle punten als geldt dat de meerderheid van de buren tot een van de andere klasses behoort, en als ook de meerderheid van de buren, van de buren die van dezelfde klasse als dat punt zijn, tot een van de andere klasses behoort.
+Het tweede orde algoritme verwijderd alle punten als geldt dat de meerderheid van de buren tot een van de andere klasses behoort, en als ook de meerderheid van de buren, van de buren die van dezelfde klasse als dat punt zijn, tot een van de andere klasses behoort.\\
 
 De testset wordt geklassificeerd op de volgende manier: Eerst wordt de graaf van alle punten van de trainset  geconstrureerd. Vervolgens wordt eerste of tweede orde editing toegepast. Daarna wordt condensing toegepast. Met de bewerkte graaf die overblijft wordt een klasse aan elk van de punten in de testset toegewezen. Dit gebeurt behulp van het k-nearest neighbour algoritme. Van elk punt in de testset wordt gekeken welke k punten het dichtste bij liggen. Deze k dichtstbijzijnde punten bepalen we ofwel door alleen naar de directe buren van het testsetpunt te kijken (eerste orde), ofwel naar de directe buren en buren van die directe buren te kijken. Als k groter is dan het aantal buren dat het testsetpunt heeft, worden alleen die buren gebruikt, waardoor k voor dat punt dus minder is.
 
@@ -61,13 +72,97 @@ De testset wordt geklassificeerd op de volgende manier: Eerst wordt de graaf van
 \emph{Report results of experiments with the selected method on the considered datasets, 
 in particular accuracy and storage reduction reduction. }\\
 
-We hebben onze methode met verschillende datasets getest\\ %hier opsomming van maken
-- de xor-dataset met 2 dimensies en 2 mogelijke klasses\\
-- de mnist-dataset met 196 dimensies en 10 mogelijke klasses\\
-- de diebetes-dataset met 8 dimensies en 2 mogelijke klasses\\
+We hebben onze methode met verschillende datasets getest:
+\begin{enumerate}
+\item de XOR-dataset met 2 dimensies en 2 mogelijke klasses
+\item MNIST-dataset met 196 dimensies en 10 mogelijke klasses
+\item de diabetes-dataset met 8 dimensies en 2 mogelijke klasses
+\end{enumerate}
 
-\subsection{Xor}
-We hebben de gemiddelde nauwkeurigheid en reductie voor elke 'error-rate' bepaald, door het gemiddelde te nemen van de score van alle testsets (dat waren er 40), toegepast op alle trainsets (er waren 10 trainsets). Hierbij hebben we Gabriel Graphs gebruikt. We hebben deze tests gedaan voor eerste orde en tweede orde editing, in combinatie met eerste orde en tweede orde k-nearest-neighbour. Hieronder staat de testresultaten weergegeven in een tabel en daarbij twee grafieken die de resultaten uit de tabel weergeven.
+\subsection{XOR}
+We hebben de gemiddelde nauwkeurigheid en reductie voor elke 'error-rate' bepaald, door het gemiddelde te nemen van de score van alle testsets (dat waren er 40), toegepast op alle trainsets (er waren 10 trainsets). Hierbij hebben we Gabriel Graphs gebruikt. We hebben deze tests gedaan voor eerste orde en tweede orde editing, in combinatie met eerste orde en tweede orde (k-nearest-neighbour) tests op de punten van de testset. Hieronder staat de testresultaten weergegeven in een tabel en daarbij twee grafieken die de resultaten uit de tabel weergeven. \\
+
+\subsubsection{Eerste orde editing, eerste orde tests}
+\begin{tabular}{|c|c|c|c|} \hline
+Ruis & K=1 & K=3 & K=5 \\ \hline
+0\% &	92,9975 &	90,17 &	88,58 \\
+10\% &	91,37 &	88,6925 &	86,945 \\
+20\% &	86,7875 &	86,07 &	84,625 \\
+30\% &	75,7175 &	73,7675 &	72,9125 \\
+40\% &	65,185 &	66,11 &	65,31 \\
+Gem.	& 82,4115 &	80,962 &	79,6745 \\
+Gem. tot 20\%  ruis &	90,385 &	88,31083333 &	86,71666667 \\ \hline
+\end{tabular} \\
+
+\begin{center} \includegraphics[scale=0.7]{xor_1stordedit_1stordtest_lijn} \end{center}
+\begin{center} \includegraphics[scale=0.7]{xor_1stordedit_1stordtest_staaf} \end{center}
+
+\subsubsection{Tweede orde editing, eerste orde tests}
+\begin{tabular}{|c|c|c|c|} \hline
+Ruis &	K=1 &	K=3 &	K=5 \\ \hline
+0\% &	93,005 &	92,1775 &	91,3025 \\
+10\%	 & 88,7825 & 	89,205 &	88,2175 \\
+20\%	 & 82,085	& 82,7275	& 82,34 \\
+30\%	 & 70,8475	& 71,06 &	70,4 \\
+40\%	 & 61,8275	 & 62,33 &	61,9375 \\
+Gem.	& 79,3095	& 79,5 &	78,8395 \\
+Gem. tot 20\% ruis &	87,9575 &	88,03666667 &	87,28666667 \\ \hline
+\end{tabular} \\
+
+\begin{center} \includegraphics[scale=0.7]{xor_2ndordedit_1stordtest_lijn} \end{center}
+\begin{center} \includegraphics[scale=0.7]{xor_2ndordedit_1stordtest_staaf} \end{center}
+
+\subsubsection{Eerste orde editing, tweede orde tests}
+
+\begin{tabular}{|c|c|c|c|} \hline
+Ruis &	K=1 &	K=3 &	K=5 \\ \hline
+0\% &	92,9975 &	89,9475 &	86,515 \\
+10\%	 & 91,37 & 	89,29 &	84,865 \\
+20\%	 & 86,7875 & 	84,17 &	83,49 \\
+30\%	& 75,7175 & 	74,83 &	75,4975 \\
+40\% & 65,185	& 66,7225 &	69,54 \\
+Gem.	& 82,4115	& 80,992 &	79,9815 \\
+Gem. tot 20\% ruis &	90,385 &	87,8025 &	84,95666667 \\ \hline
+\end{tabular} \\
+
+\begin{center} \includegraphics[scale=0.7]{xor_1stordedit_2ndordtest_lijn} \end{center}
+\begin{center} \includegraphics[scale=0.7]{xor_1stordedit_2ndordtest_staaf} \end{center}
+
+\subsubsection{Tweede orde editing, tweede orde tests}
+
+\begin{tabular}{|c|c|c|c|} \hline
+Ruis &	K=1 &	K=3 &	K=5 \\ \hline
+0\%	& 93,005 &	90,065 &	86,7675 \\
+10\%	 & 88,7825 &	88,25 &	85,98 \\
+20\%	 & 82,085 &	82,4625 &	82,4 \\
+30\%	 & 70,8475 &	73,93 &	75,735 \\
+40\%	 & 61,8275 &	62,2375 &	64,6 \\
+Gem.	 & 79,3095 &	79,389 &	79,0965 \\
+Gem. tot 20\% ruis &	87,9575 &	86,92583333 &	85,04916667 \\ \hline
+\end{tabular} \\
+
+\begin{center} \includegraphics[scale=0.7]{xor_2ndordedit_2ndordtest_lijn} \end{center}
+\begin{center} \includegraphics[scale=0.7]{xor_2ndordedit_2ndordtest_staaf} \end{center}
+
+%reductie nog erbij
+
+\subsubsection{Conclusie XOR}
+
+Nauwkeurigheid van het klassificeren: \\
+Uit de staaf grafieken blijkt dat voor de xor-dataset gemiddeld het beste k=1 gebruikt kan worden voor het k-nearest-neighbour algoritme, als er weinig ruis in de dataset zit.  Als er veel ruis in de dataset zit, levert k=5 gemiddeld een zelfde of beter resultaat.
+Eerste orde editing levert gemiddeld een iets beter resultaat, vooral voor k=1. De orde van testen heeft niet zo veel invloed, dit kan misschien verklaard worden doordat het aantal buren van een punt vaak groter is dan k, waardoor tweede orde testen ook alleen tests doet met alleen de directe buren.\\
+
+Reductie van het aantal punten in de trainset: \\
+
+%conclusie reductie
+
+
+
+\subsection{MNIST}
+
+\subsection{Diabetes}
+
+
 
 \emph{Discuss the performance of the selected method.}\\
 
