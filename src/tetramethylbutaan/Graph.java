@@ -242,7 +242,7 @@ public abstract class Graph
 			while(iter.hasNext())
 			{
 				GraphPoint p = iter.next();
-				if(getFirstOrderClassification(p.getEdges()) != p.getClassification())
+				if(getFirstOrderClassification(p.getEdges()) != p.getClassification()) //&& totalVotes[p.getClassification()+1] < (0.5 + 0.5/Point.nrClasses) * p.getEdges().size())
 				{
 					if(editOrder == EDIT_1ST_ORDER || getSecondOrderClassification(p) != p.getClassification())
 					{

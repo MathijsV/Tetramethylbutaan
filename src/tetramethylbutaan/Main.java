@@ -33,6 +33,7 @@ public class Main
 		}*/
 		customTest();
 		//autoTest();
+		//trainingSetTest("nieuws_train.txt", new RelatedNeighbourHoodGraph(), Graph.EDIT_1ST_ORDER, 0.8);
 	}
 	
 	private void setDimensions(String dataType)
