@@ -18,7 +18,7 @@ public class Main
 	
 	public Main()
 	{
-		for (int K = 1; K <= 5; K +=2)
+		/*for (int K = 1; K <= 5; K +=2)
 		{
 			Graph.K = K;
 			for (String dataType : new String[]{"xor", "diabetes", "mnist"})
@@ -30,8 +30,8 @@ public class Main
 					trainingSetTest(dataType + "_train.txt", new RelatedNeighbourHoodGraph(), order, 0.8);
 				}
 			}
-		}
-		//customTest();
+		}*/
+		customTest();
 		//autoTest();
 	}
 	
@@ -93,22 +93,22 @@ public class Main
 	
 	private void customTest()
 	{
-		String fileType = "mnist";
+		String fileType = "nieuws";
 		
 		Graph graph = new TrainingSetReader(fileType + "_train.txt", new RelatedNeighbourHoodGraph()).getData();
 		constructGraph(graph, Graph.EDIT_1ST_ORDER);
 		
 		String testFile = fileType + "_test.txt";
 		System.out.println("Collecting results...");
-        new TestSetReader(testFile, graph, "testResults/classes_k1_2ndorderedit_1stordertest.txt");
-        graph.K = 3;
+        new TestSetReader(testFile, graph, "testResults/classes_k1_1storderedit_1stordertest.txt");
+        /*graph.K = 3;
         new TestSetReader(testFile, graph, "testResults/classes_k3_2ndorderedit_1stordertest.txt");
         graph.K = 5;
-        new TestSetReader(testFile, graph, "testResults/classes_k5_2ndorderedit_1stordertest.txt");
+        new TestSetReader(testFile, graph, "testResults/classes_k5_2ndorderedit_1stordertest.txt");*/
         try
         {
             // Create file
-            FileWriter fstream = new FileWriter("testResults/prototypes_2ndorderedit.txt");
+            FileWriter fstream = new FileWriter("testResults/prototypes_1storderedit.txt");
             BufferedWriter out = new BufferedWriter(fstream);
 
             for(GraphPoint p : graph.getPoints())
@@ -128,7 +128,8 @@ public class Main
         {
             System.err.println("Error: " + ex.getMessage());
         }
-		
+		//System.out.println(Point.numEuclCalled);
+		//System.out.println(Point.euclTime);
 		
         /*
 		Iterator<Integer> result = new TestSetReader("mnist_train.txt", gabrielGraph).getResults().iterator();

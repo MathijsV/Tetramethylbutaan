@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 public abstract class Graph
 {
 	public final static int EDIT_1ST_ORDER = 1, EDIT_2ND_ORDER = 2;
-    public static int K = 1;
+    public static int K = 3;
     public final static int NUM_THREADS = 4;
     
     private static int[] totalVotes = null;
