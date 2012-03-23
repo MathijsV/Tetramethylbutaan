@@ -30,22 +30,4 @@ public class GabrielGraph extends Graph
 		return true;
 	}
 	
-	protected void recalculateEdges(List<GraphPoint> neighbours) 
-	//gebruik maken van dezelfde volgorde edges in sub als in this?
-	{
-		GabrielGraph sub = new GabrielGraph(neighbours);
-        sub.createEdges();
-		for(GraphPoint sp: sub.points)
-		{
-			for(GraphPoint pp: points)
-			{
-				if(sp.equals(pp))
-				{
-					List<GraphPoint> spedges = sp.getEdges();
-					for(GraphPoint newEdge: spedges)
-						pp.copyEdge(newEdge);
-				}
-			}
-		}
-	}
 }

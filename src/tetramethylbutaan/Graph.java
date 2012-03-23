@@ -12,37 +12,42 @@ import java.util.logging.Logger;
 
 public abstract class Graph
 {
-	public final static int EDIT_1ST_ORDER = 1, EDIT_2ND_ORDER = 2;
-    public static int K = 3;
+	public final static int EDIT_1ST_ORDER = 1, EDIT_2ND_ORDER = 2, EDIT_DYNAMIC = 3;
+    public static int K = 0;
     public final static int NUM_THREADS = 4;
-    
+    public static double NOISE_TRESHOLD = 0.5 + 0.5/Point.classes.length;
     private static int[] totalVotes = null;
-	
 	protected List<GraphPoint> points = new ArrayList<GraphPoint>();
+
+    public static void setNoiseTreshold(double f)
+    {
+        NOISE_TRESHOLD = f + (1.0 - f)/((double)Point.classes.length);
+    }
     
 	public void add(GraphPoint p)
 	{
 		points.add(p);
 	}
-	
+
+    /*
 	public void makeGraph(List<GraphPoint> ps)
     {
         for(GraphPoint p: ps)
         {
             addPointToGraph(p, p.getClassification());
         }
-    }
-	
+    }*/
+	/*
 	public void addPointToGraph(GraphPoint p, int classification)
 	{
 		List<GraphPoint> neighbours = new ArrayList<GraphPoint>();
-		/*for(GraphPoint gp: points)
+		for(GraphPoint gp: points)
 		{
 			if(isNeighbour(p, gp))
 			{
 				neighbours.add(gp);
 			}
-		}*/
+		}
 		for(GraphPoint gp: points)
         {
             if(isNeighbour(p, gp))
@@ -67,14 +72,14 @@ public abstract class Graph
 		points.add(p);
 		neighbours.add(p);
 		recalculateEdges(neighbours);
-	}
+	}*/
 	
 	/**
 	 * Tests which classification a given point p will get according to this graph.
 	 * @param p The point to test.
 	 * @return An integer indicating the expected classification.
 	 */
-	public int test(GraphPoint p)
+	public int test(GraphPoint p, boolean weighted)
 	{
 		// Start building a list of neighbours of this point
 		List<GraphPoint> neighbours = new ArrayList<GraphPoint>();
@@ -98,11 +103,53 @@ public abstract class Graph
                 }*/
             }
 		}
+        List<GraphPoint> toTest = new ArrayList<GraphPoint>();
+        if (K == 0) // adaptive!
+            toTest = neighbours;
+        else
+        {
+            Collections.sort(neighbours, new DistanceComparator(p));
+            toTest = neighbours.subList(0, (Math.min(K, neighbours.size())));
+        }
+        if (weighted)
+        {
+            return getWeightedClassification(p, toTest);
+        }
+        else
+        {
+            return getFirstOrderClassification(toTest);
+        }
 
-        Collections.sort(neighbours, new DistanceComparator(p));
-		return getFirstOrderClassification(neighbours.subList(0, (Math.min(K, neighbours.size()))));
-	}
-	
+    }
+
+    private int getWeightedClassification(GraphPoint point, List<GraphPoint> neighbours)
+    {
+        double votes[] = new double[Point.classes.length];
+
+		// Count the classes of all the neighbours
+		Iterator<GraphPoint> neighbourIterator = neighbours.iterator();
+		while(neighbourIterator.hasNext())
+		{
+            GraphPoint neighbour = neighbourIterator.next();
+			int classIndex = Point.getClassIndex(neighbour.getClassification());
+			votes[classIndex] += 1/(Math.sqrt(neighbour.euclideanDistance2(point)) + 1);
+		}
+
+        // Find the class with the most votes
+        double maxVotes = 0;
+        int maxClass = 0;
+        for(int i = 0; i < (Point.classes.length); i++)
+        {
+        	if(votes[i] > maxVotes)
+            {
+                maxVotes = votes[i];
+                maxClass = Point.classes[i];
+            }
+        }
+
+        return maxClass;
+    }
+
     public List<GraphPoint> getPoints()
     {
         return points;
@@ -112,14 +159,11 @@ public abstract class Graph
 
 	public void createEdges()
 	{
-		if(totalVotes == null)
-		{
-			// Count all classes
-			totalVotes = new int[Point.nrClasses+1];
-			for(Point p : points)
-			{
-				totalVotes[p.getClassification()+1]++;
-			}
+        // Count all classes
+        totalVotes = new int[Point.classes.length];
+        for(Point p : points)
+        {
+            totalVotes[Point.getClassIndex(p.getClassification())]++;
 		}
 		
         ExecutorService executor = Executors.newCachedThreadPool();
@@ -147,38 +191,54 @@ public abstract class Graph
         }
     }
 
+    public static boolean isNoise(GraphPoint p)
+    {
+        List<GraphPoint> neighbours = p.getEdges();
+        int nrEqualClass = 0;
+        for (GraphPoint neighbour : neighbours)
+        {
+            int nClass = neighbour.getClassification();
+            if (nClass == p.getClassification())
+                nrEqualClass++;
+        }
+        boolean noise = (double) nrEqualClass < NOISE_TRESHOLD * (double)neighbours.size();
+
+        return noise;
+    }
+
+
+
 	/**
 	 * @param neighbours: the neighbours of a point or subgraph
 	 * @return the most occuring class in neighbours 
 	 */
 	public static int getFirstOrderClassification(List<GraphPoint> neighbours)
 	{
-		int votes[] = new int[Point.nrClasses+1];
+		int votes[] = new int[Point.classes.length];
 		
 		// Count the classes of all the neighbours
 		Iterator<GraphPoint> neighbourIterator = neighbours.iterator();
 		while(neighbourIterator.hasNext())
 		{
-			int classnr = neighbourIterator.next().getClassification();
-			votes[classnr+1] = votes[classnr+1] + 1;
+			int classIndex = Point.getClassIndex(neighbourIterator.next().getClassification());
+			votes[classIndex]++;
 		}
 
 		// Build a list of possible classes
         List<Integer> possibleClasses = new ArrayList<Integer>();
-        int maxVotes = 0, counter = 0;
+        int maxVotes = 0;
         
         // Find the class with the most votes
-        for(int i = 0; i < (Point.nrClasses + 1); i++)
+        for(int i = 0; i < (Point.classes.length); i++)
         {
         	if(votes[i] > maxVotes) maxVotes = votes[i];
         }
 
         // Find the class(es) with the most votes.
-        for(Integer i : votes)
+        for (int i = 0; i < votes.length; i++)
         {
-            if(i == maxVotes)
-                possibleClasses.add(counter-1);
-            counter++;
+            if (votes[i] == maxVotes)
+                possibleClasses.add(Point.classes[i]);
         }
         
         // If more than one class is possible, use the most common one
@@ -189,9 +249,9 @@ public abstract class Graph
         	int mostCommonClass = 0, mostCommonClassVotes = 0;
         	for(Integer i : possibleClasses)
         	{
-        		if(totalVotes[i+1] > mostCommonClassVotes)
+        		if(totalVotes[Point.getClassIndex(i)] > mostCommonClassVotes)
         		{
-        			mostCommonClassVotes = totalVotes[i+1];
+        			mostCommonClassVotes = totalVotes[Point.getClassIndex(i)];
         			mostCommonClass = i;
         		}
         	}
@@ -225,7 +285,7 @@ public abstract class Graph
 	 * calculates the (new) edges between the neighbours
 	 * @param neighbours: the neighbours of already a removed point
 	 */
-	protected abstract void recalculateEdges(List<GraphPoint> neighbours);
+	//protected abstract void recalculateEdges(List<GraphPoint> neighbours);
 	
 	/**
 	 * removes graphpoints from a graph which are misclassified by their neighbours
@@ -234,7 +294,7 @@ public abstract class Graph
 	public void edit(int editOrder)
 	{
 		List<GraphPoint> removePoints = new LinkedList<GraphPoint>();
-        if(editOrder != EDIT_1ST_ORDER && editOrder != EDIT_2ND_ORDER)
+        if(editOrder != EDIT_1ST_ORDER && editOrder != EDIT_2ND_ORDER && editOrder != EDIT_DYNAMIC)
 			return;
 		else
 		{
@@ -242,20 +302,11 @@ public abstract class Graph
 			while(iter.hasNext())
 			{
 				GraphPoint p = iter.next();
-				if(getFirstOrderClassification(p.getEdges()) != p.getClassification()) //&& totalVotes[p.getClassification()+1] < (0.5 + 0.5/Point.nrClasses) * p.getEdges().size())
-				{
-					if(editOrder == EDIT_1ST_ORDER || getSecondOrderClassification(p) != p.getClassification())
-					{
-						/*List<GraphPoint> edges = p.getEdges();
-						Iterator<GraphPoint> edgeIterator = edges.iterator();
-						while(edgeIterator.hasNext())
-							edgeIterator.next().removeEdge(p);*/
+				if((editOrder == EDIT_1ST_ORDER && getFirstOrderClassification(p.getEdges()) != p.getClassification())
+                || (editOrder == EDIT_2ND_ORDER && getSecondOrderClassification(p) != p.getClassification())
+                || (editOrder == EDIT_DYNAMIC   && isNoise(p)))
                         removePoints.add(p);
-					}
-				}
-				
 			}
-
             //System.out.println("Editing: removing " + removePoints.size() + " points");
            // points.removeAll(removePoints);
             Iterator<GraphPoint> removeIt = removePoints.iterator();
@@ -281,7 +332,6 @@ public abstract class Graph
                 // Remove the point
                 allPointsIt.remove();
             }
-            
             removeEdges();
             createEdges();
 		}

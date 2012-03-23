@@ -41,7 +41,7 @@ public class PointTester implements Runnable
             List<GraphPoint> neighbours = new ArrayList<GraphPoint>();
             GraphPoint p = testPoint.next();
 
-            results.add(graph.test(p));
+            results.add(graph.test(p, false));
             /*Iterator<GraphPoint> iter = graph.getPoints().iterator();
             while(iter.hasNext())
             {

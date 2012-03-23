@@ -29,23 +29,5 @@ public class RelatedNeighbourHoodGraph extends Graph
 		}
 		return true;
 	}
-	
-	protected void recalculateEdges(List<GraphPoint> neighbours) 
-	//gebruik maken van dezelfde volgorde edges in sub als in this?
-	{
-		RelatedNeighbourHoodGraph sub = new RelatedNeighbourHoodGraph(neighbours);
-        sub.createEdges();
-		for(GraphPoint sp: sub.points)
-		{
-			for(GraphPoint pp: points)
-			{
-				if(sp.equals(pp))
-				{
-					List<GraphPoint> spedges = sp.getEdges();
-					for(GraphPoint newEdge: spedges)
-						pp.copyEdge(newEdge);
-				}
-			}
-		}
-	}
+
 }

@@ -1,12 +1,15 @@
 package tetramethylbutaan;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 
 public class GraphPoint extends Point
 {
-	private List<GraphPoint> edges = new ArrayList<GraphPoint>();
-	
+	private List<GraphPoint> edges = Collections.synchronizedList(new ArrayList<GraphPoint>());
+	private HashMap<GraphPoint, Double> distances = new  HashMap<GraphPoint, Double>();
+
 	public GraphPoint(double[] features)
 	{
 		super(features);
@@ -22,20 +25,30 @@ public class GraphPoint extends Point
 		super();
 	}
 	
-	public synchronized void addEdge(GraphPoint p)
+	public void addEdge(GraphPoint p)
 	{
+        double distance = Math.sqrt(p.euclideanDistance2(this));
 		edges.add(p);
+        distances.put(p, distance);
 		p.edges.add(this);
+        p.distances.put(this, distance);
 	}
-	
-	public synchronized void copyEdge(GraphPoint p)
+
+    public double getDistance (GraphPoint p)
+    {
+        if(distances.get(p) == null)
+            System.out.println("d null!");
+        return distances.get(p);
+    }
+
+	/*public synchronized void copyEdge(GraphPoint p)
 	{
 		if(!hasEdgeWith(p) && !p.hasEdgeWith(this))
 		{
 			edges.add(p);
 			p.edges.add(this);
 		}
-	}
+	}*/
 	
 	// Overbodige functie, zelfde als getEdges
     /*public List<GraphPoint> getNeighbours()
@@ -43,7 +56,7 @@ public class GraphPoint extends Point
         return edges;
     }*/
     
-	public synchronized boolean hasEdgeWith(GraphPoint point)
+	public boolean hasEdgeWith(GraphPoint point)
 	{
 		return edges.contains(point);
 		/*for (GraphPoint p : edges)
@@ -58,9 +71,15 @@ public class GraphPoint extends Point
 		return edges;
 	}
 	
-	public synchronized boolean removeEdge(GraphPoint p)
+	public boolean removeEdge(GraphPoint p)
 	{
-		return edges.remove(p);
+        boolean contains = edges.remove(p);
+        if (contains)
+        {
+            distances.remove(p);
+        }
+
+		return contains;
 		/*if(hasEdgeWith(p))
 		{
 			edges.remove(p);
@@ -71,8 +90,9 @@ public class GraphPoint extends Point
 			return false;*/
 	}
 
-    public synchronized void removeEdges()
+    public void removeEdges()
     {
         edges = new ArrayList<GraphPoint>();
+        distances = new  HashMap<GraphPoint, Double>();
     }
 }

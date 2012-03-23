@@ -1,14 +1,20 @@
 package tetramethylbutaan;
 
+import java.util.HashMap;
+
 public class Point
 {
-	public static int nrDimensions = 20;
-	public static int nrClasses = 4;
+	public static int nrDimensions = 400;
+    
+	//public static int nrClasses = 4;
+    public static HashMap<Integer, Integer> classesToIndex;
+    public static int[] classes;
+
 	protected double[] features;
 	protected int classification = 0;
 	//public static int numEuclCalled = 0;
 	//public static long euclTime;
-	
+
 	public Point()
 	{
 		features = new double[nrDimensions];
@@ -26,6 +32,23 @@ public class Point
 		this(features);
 		setClassification(c);
 	}
+
+    public static void setClasses(int[] classes)
+    {
+        Point.classes = classes;
+        int i = 0;
+        classesToIndex = new HashMap<Integer, Integer>();
+        for (int c : classes)
+        {
+            classesToIndex.put(c, i);
+            i++;
+        }
+    }
+
+    public static int getClassIndex(int classification)
+    {
+        return classesToIndex.get(classification);
+    }
 
     public double[] getFeatures()
     {
