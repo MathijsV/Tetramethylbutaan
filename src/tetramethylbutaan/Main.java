@@ -35,8 +35,8 @@ public class Main
 		//customTest();
 		//autoTest();
         String[] types = {"xor","diabetes","nieuws"};
-        Graph.K = 0;
-        massTrainingSetTest(types, 0.5, 1, 0.1, Graph.EDIT_DYNAMIC, 0.8, true);
+        Graph.K = 1;
+        massTrainingSetTest(types, 0.0, 1, 0.1, Graph.EDIT_1ST_ORDER, 0.8, false);
         //System.out.println("a\t\tb");
 	}
 
@@ -86,11 +86,18 @@ public class Main
             DecimalFormat f = new DecimalFormat("#.##");
             System.out.println("\n\n" + type + ":");
             setDimensions(type);
-            for (double i = minTresh; i <= maxTresh; i += deltaTresh)
+            if(editOrder == Graph.EDIT_DYNAMIC)
             {
-                Graph.setNoiseTreshold(i);
-                System.out.println("" + f.format(Graph.NOISE_TRESHOLD) + "");
-                trainingSetTest(type + "_train.txt", new GabrielGraph(), editOrder, 0.8, weighted);
+	            for (double i = minTresh; i <= maxTresh; i += deltaTresh)
+	            {
+	                Graph.setNoiseTreshold(i);
+	                System.out.println("" + f.format(Graph.NOISE_TRESHOLD) + "");
+	                trainingSetTest(type + "_train.txt", new GabrielGraph(), editOrder, 0.8, weighted);
+	            }
+            }
+            else
+            {
+            	trainingSetTest(type + "_train.txt", new GabrielGraph(), editOrder, 0.8, weighted);
             }
         }
     }

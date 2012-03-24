@@ -15,7 +15,7 @@ public abstract class Graph
 	public final static int EDIT_1ST_ORDER = 1, EDIT_2ND_ORDER = 2, EDIT_DYNAMIC = 3;
     public static int K = 0;
     public final static int NUM_THREADS = 4;
-    public static double NOISE_TRESHOLD = 0.5 + 0.5/Point.classes.length;
+    public static double NOISE_TRESHOLD = 0.5 ;//+ 0.5/Point.classes.length;
     private static int[] totalVotes = null;
 	protected List<GraphPoint> points = new ArrayList<GraphPoint>();
 
