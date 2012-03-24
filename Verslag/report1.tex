@@ -227,4 +227,97 @@ De reductie bij de simpele XOR-test lag tussen de 50\% en 76\%, waarbij met name
 Omdat de nauwkeurigheid van eerste- en tweede-orde editing niet veel uiteen lopen, maar eerste-orde wel consistent meer reductie behaalt, lijkt dit dus onder verschillende omstandigheden het betere testcriterium te zijn.
 
 De performance van het algoritme is voor grote testsets slecht, doordat de implementatie een complexiteit van $\theta (d\cdot N^3)$ heeft. Dit zou verbeterd kunnen worden door een ander algoritme te gebruiken om de buren van een punt te bepalen. Ook de methode voor de editing/condensing zou verbeterd kunnen worden, er is in sommige gevallen slechts weinig reductie waardoor de benodigde CPU-tijd voor het testen ook toeneemt. De nauwkeurigheid op testsets verschilt, voor MNIST is deze redelijk laag en voor grotere sets zou de nauwkeurigheid dus verbeterd mogen worden. Voor de XOR-set en de diabetes-set is de nauwkeurigheid goed.
+
+\section{Verbeteringen} %de titels hieronder kunnen vast wel beter
+
+\subsection{Uitleg}
+\subsubsection{Dynamic editing}
+Omdat eerste en tweede orde editing weinig reductie van de dataset opleverden, hebben we een nieuwe methode bedacht om meer punten te verwijderen: dynamic editing. Net zoals bij de andere soorten editing bepalen de buren van een punt of het punt mag blijven of niet. We gebruiken een ‘threshold’ als eis om het punt te verwijderen. Als het aantal buren van een punt, met dezelfde klasse als dat punt, minder is dan de threshold vermenigvuldigt met het aantal buren, dan wordt dat punt verwijdert. Dus hoe hoger de threshold, hoe meer punten er verwijdert worden, dus hoe meer reductie. In Figuur \ref{buren} wordt het punt dus verwijdert als de threshold hoger is dan 2/3.
+\clearpage
+
+\begin{figure}[!h]
+    \centering
+        \includegraphics[scale=0.4, page=1]{buren}
+	\caption{Een punt en zijn buren}
+    \label{buren}
+\end{figure}
+
+\subsubsection{Adaptive nearest Neighbour}
+Adaptive nearest neighbour is een variant op k-nearest neighbour. In plaats van de k dichtstbijzijnde punten gebruikt Adaptive nearest neighbor alle buren van een nieuw punt om de klasse van dat nieuwe punt te bepalen. De klasse van het nieuwe punt wordt dus bepaald door de klasse die meerderheid van de buren van het nieuwe punt heeft. Op deze manier wordt gebruik gemaakt van de eigenschappen van de graaf die is opgebouwd uit de punten van de trainset. 
+
+\subsubsection{Weighted Classification}
+...blabla...
+
+\subsection{Experimenten}
+\subsubsection{Dynamic editing}
+We hebben dynamic editing getest op verschillende datasets door 80\% van de trainset te gebruiken om de graaf mee te construeren, en vervolgens de overige 20\% van de trainset te gebruiken als testset. Hieronder staan de tabellen en bijbehorende grafiek.\\
+\\
+Xor\\
+\begin{tabular}{|c|c|c|c|c|}  \hline			
+Threshold	& Accuracy &	Reduction \\ \hline
+0,5 &	65 &	58,75 \\
+0,55 &	85 &	73,75 \\
+0,6 &	85 &	73,75 \\
+0,65 &	85 &	73,75 \\
+0,7 &	65 &	86,25 \\
+0,75 &	65 &	86,25 \\
+0,8 &	60 &	85 \\
+0,85 &	55 &	83,75 \\
+0,9 &	55 &	83,75 \\
+0,95 &	55 &	83,75 \\
+1 &	55 &	83,75 \\ \hline
+\end{tabular} \\
+\\
+Diabetes\\
+\begin{tabular}{|c|c|c|c|c|}  \hline			
+Threshold	& Accuracy &	Reduction \\ \hline
+0,5 &	72,82 &	46,21 \\
+0,55 &	74,76 &	55,01 \\
+0,6 &	72,82 &	69,68 \\
+0,65 &	76,7 &	75,06 \\
+0,7 &	79,61 &	84,35 \\
+0,75 &	76,7 &	90,22 \\
+0,8 &	77,67 &	91,2 \\
+0,85 &	75,73 &	95,84 \\
+0,9 &	72,82 &	97,31 \\
+0,95 &	65,05 &	100 \\
+1 &	65,05 &	100 \\ \hline
+\end{tabular} \\
+\\
+Nieuwsgroepen\\
+\begin{tabular}{|c|c|c|c|c|}  \hline			
+Threshold	& Accuracy &	Reduction \\ \hline
+0,47 &	89,5 &	36 \\
+0,53 &	90 &	42,88 \\
+0,6 &	90 &	49,62 \\
+0,67 &	91,5 &	57,12 \\
+0,73 &	88,5 &	64,5 \\
+0,8 &	87,5 &	72,88 \\
+0,87 &	82,5 &	79,75 \\
+0,93 &	78,5 &	86,88 \\
+1 &	73,5 &	91 \\ \hline
+\end{tabular} \\
+
+\begin{center} \includegraphics[scale=0.7]{GG_dynamic} \end{center}
+
+Om te bepalen hoe goed dynamic editing is hebben we voor elke dataset de threshold met de 'beste score` genomen uit bovenstaande grafiek. De beste score hebben we bepaald door voor iedere threshold de som van de accuracy en reduction te bepalen, en vervolgens de hoogste te nemen. Deze score hebben we vergeleken met eerste orde editing. Hieronder staat eerst de tabel met de resultaten van eerste orde editing en vervolgens de grafiek waarin dynamic en eerste orde editing worden vergeleken.\\
+\\
+\begin{tabular}{|c|c|c|c|c|}  \hline			
+Dataset	& Accuracy &	Reduction \\ \hline
+Xor	& 85 &	72,5 \\
+Diabetes &	73,79 &	49,63 \\
+Nieuwsgroepen &	91,5 &	31 \\ \hline
+\end{tabular} \\
+
+\begin{center} \includegraphics[scale=0.7]{dynamic_vs_1storder} \end{center}
+1 =	xor dynamic t=0.65\\
+2 =	xor 1st order\\
+3 =	diabetes dynamic t=0.85\\
+4 =	diabetes 1st order\\
+5 =	nieuwsgroepen dynamic t=0.93\\
+6 =	nieuwsgroepen 1st order\\
+
+
+\subsection{Conclusies}
+
 \end{document}

@@ -3,14 +3,24 @@
 \contentsline {section}{\numberline {2}Het Probleem}{2}
 \contentsline {subsection}{\numberline {2.1}Condensing en editing}{2}
 \contentsline {subsection}{\numberline {2.2}De methode}{3}
-\contentsline {section}{\numberline {3}Experimenten}{5}
-\contentsline {subsection}{\numberline {3.1}XOR}{5}
-\contentsline {subsubsection}{\numberline {3.1.1}Eerste orde editing, eerste orde tests}{6}
-\contentsline {subsubsection}{\numberline {3.1.2}Tweede orde editing, eerste orde tests}{7}
+\contentsline {subsubsection}{\numberline {2.2.1}Gabriel Graph}{3}
+\contentsline {subsubsection}{\numberline {2.2.2}Relative Neighbourhood Graph}{5}
+\contentsline {section}{\numberline {3}Experimenten}{7}
+\contentsline {subsection}{\numberline {3.1}XOR}{7}
+\contentsline {subsubsection}{\numberline {3.1.1}Eerste orde editing, eerste orde tests}{7}
+\contentsline {subsubsection}{\numberline {3.1.2}Tweede orde editing, eerste orde tests}{8}
 \contentsline {subsubsection}{\numberline {3.1.3}Eerste orde editing, tweede orde tests}{9}
 \contentsline {subsubsection}{\numberline {3.1.4}Tweede orde editing, tweede orde tests}{10}
-\contentsline {subsubsection}{\numberline {3.1.5}Reductie}{12}
-\contentsline {subsubsection}{\numberline {3.1.6}Conclusies}{12}
-\contentsline {subsection}{\numberline {3.2}MNIST}{13}
+\contentsline {subsubsection}{\numberline {3.1.5}Reductie}{11}
+\contentsline {subsection}{\numberline {3.2}MNIST}{12}
 \contentsline {subsection}{\numberline {3.3}Diabetes}{13}
-\contentsline {section}{\numberline {4}Conclusie}{13}
+\contentsline {subsection}{\numberline {3.4}Performance}{14}
+\contentsline {section}{\numberline {4}Conclusie}{14}
+\contentsline {section}{\numberline {5}Verbeteringen}{15}
+\contentsline {subsection}{\numberline {5.1}Uitleg}{15}
+\contentsline {subsubsection}{\numberline {5.1.1}Dynamic editing}{15}
+\contentsline {subsubsection}{\numberline {5.1.2}Adaptive nearest Neighbour}{16}
+\contentsline {subsubsection}{\numberline {5.1.3}Weighted Classification}{16}
+\contentsline {subsection}{\numberline {5.2}Experimenten}{16}
+\contentsline {subsubsection}{\numberline {5.2.1}Dynamic editing}{16}
+\contentsline {subsection}{\numberline {5.3}Conclusies}{18}
