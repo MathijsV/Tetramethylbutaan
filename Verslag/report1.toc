@@ -23,5 +23,6 @@
 \contentsline {subsubsection}{\numberline {5.1.3}Weighted Classification}{16}
 \contentsline {subsection}{\numberline {5.2}Experimenten}{16}
 \contentsline {subsubsection}{\numberline {5.2.1}Dynamic editing}{16}
-\contentsline {subsection}{\numberline {5.3}Weighted adaptive nearest neighbour}{18}
-\contentsline {subsection}{\numberline {5.4}Conclusies}{20}
+\contentsline {subsubsection}{\numberline {5.2.2}Weighted adaptive nearest neighbour}{18}
+\contentsline {subsection}{\numberline {5.3}Karakter herkenning}{20}
+\contentsline {subsection}{\numberline {5.4}Conclusies}{21}

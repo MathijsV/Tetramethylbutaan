@@ -246,7 +246,7 @@ Omdat eerste en tweede orde editing weinig reductie van de dataset opleverden, h
 Adaptive nearest neighbour is een variant op k-nearest neighbour. In plaats van de k dichtstbijzijnde punten gebruikt Adaptive nearest neighbor alle buren van een nieuw punt om de klasse van dat nieuwe punt te bepalen. De klasse van het nieuwe punt wordt dus bepaald door de klasse die meerderheid van de buren van het nieuwe punt heeft. Op deze manier wordt gebruik gemaakt van de eigenschappen van de graaf die is opgebouwd uit de punten van de trainset. 
 
 \subsubsection{Weighted Classification}
-...blabla...
+Weighted classification is bedoeld als een aanvulling op adaptive nearest neighbour, maar kan in principe ook in andere combinaties gebruikt worden. Bij weighted classification wordt telt de klasse van elke buur (die meedoet bij het stemmen) meer mee als hij dichter bij het punt ligt en minder als hij verder weg van het punt ligt. Als factor hebben we 1/d en 1/(d+1) gebruikt. Hierbij is d de euclidische afstand van het punt to de buur.
 
 \subsection{Experimenten}
 \subsubsection{Dynamic editing}
@@ -309,15 +309,9 @@ Diabetes &	73,79 &	49,63 \\
 Nieuwsgroepen &	91,5 &	31 \\ \hline
 \end{tabular} \\
 
-\begin{center} \includegraphics[scale=0.7]{dynamic_vs_1storder} \end{center}
-1 =	xor dynamic t=0.65\\
-2 =	xor 1st order\\
-3 =	diabetes dynamic t=0.85\\
-4 =	diabetes 1st order\\
-5 =	nieuwsgroepen dynamic t=0.93\\
-6 =	nieuwsgroepen 1st order\\
+\begin{center} \includegraphics[scale=0.5]{dynamic_vs_1storder} \end{center}
 
-\subsection{Weighted adaptive nearest neighbour}
+\subsubsection{Weighted adaptive nearest neighbour}
 
 \begin{tabular}{|c|c|c|c|c|}  \hline	
 Dataset & Nearest neighbour & Accuracy &	Reduction \\ \hline
@@ -379,6 +373,24 @@ Threshold	& Accuracy &	Reduction \\ \hline
 \end{tabular} \\
 
 \begin{center} \includegraphics[scale=0.7]{GG_dynamic_adaptive} \end{center}
+
+\subsection{Karakter herkenning}
+Omdat deze dataset zo groot was hebben we RNG gebruikt. Het duurt namelijk minder lang om een RNG te maken dan een GG. Dit komt doordat de eis voor het hebben van een edge strenger is, waardoor er eerder een punt wordt gevonden waardoor de eis niet geldt, waardoor dus eerder gestopt wordt met zoeken.
+
+Hieronder staat de tabel gegevens en daaronder de bijbehorende grafiek. Als er geen edit methode wordt genoemd is er eerste orde editing gebruikt en niet weighted classification.
+
+\begin{tabular}{|c|c|c|c|c|}  \hline
+Instellingen & Accuracy &	Reduction \\ \hline
+Dynamic K=1	&	98.8 &  87.0 \\
+Dynamic Adaptive &		98.8 &  87.0 \\
+K=1					98.9 & 86.1 \\
+Adaptive &			96.8  & 86.1 \\
+Weighted Adaptive (1/d+1) &	98.7& 86.1 \\
+Weighted Adaptive (1/d) &	98.8  & 86.1 \\
+Dynamic Weighted &			98.7 & 85.4 \\ \hline
+\end{tabular} \\
+
+\begin{center} \includegraphics[scale=0.5]{dynamic_vs_1st_karakter} \end{center}
 
 \subsection{Conclusies}
 
