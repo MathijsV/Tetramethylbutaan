@@ -5,15 +5,10 @@ import java.util.HashMap;
 public class Point
 {
 	public static int nrDimensions = 400;
-    
-	//public static int nrClasses = 4;
     public static HashMap<Integer, Integer> classesToIndex;
     public static int[] classes;
-
 	protected double[] features;
 	protected int classification = 0;
-	//public static int numEuclCalled = 0;
-	//public static long euclTime;
 
 	public Point()
 	{
@@ -57,8 +52,6 @@ public class Point
 	
 	public double euclideanDistance2(Point p)
 	{
-		//numEuclCalled++;
-		//long start = System.currentTimeMillis();
 		double distance = 0;
 		for (int i = 0; i < nrDimensions; i++)
 		{
@@ -66,7 +59,6 @@ public class Point
 			featureDistance2 *= featureDistance2;
 			distance += featureDistance2;
 		}
-		//euclTime += System.currentTimeMillis()-start;
 		return distance;
 	}
 	

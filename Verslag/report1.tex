@@ -1,3 +1,13 @@
+% ANN: welke settings?
+% tabellen: welke settings/tests?
+% 5.2.2 tabel: is het wel nodig om reduction te noemen, als het gaat om het vergelijken van NN?
+% weights: 1/(d+1) niet in resultaten genoemd (want stom), ook niet noemen dus?
+% weighted-ANN-tabel in 5.2.3: is dit gewoon de beste score?
+% tabel in 5.3: meerdere kolommen, ��n voor editing-methode, ��n voor kNN, ��n voor weight?
+% grafiek in 5.3: iets meer info in de naam?
+% conclusie: verklaring kleine verschillen karakter-set?
+
+
 \documentclass{article}
 
 \usepackage[vmargin=4cm]{geometry} % paginamarge
@@ -228,11 +238,11 @@ Omdat de nauwkeurigheid van eerste- en tweede-orde editing niet veel uiteen lope
 
 De performance van het algoritme is voor grote testsets slecht, doordat de implementatie een complexiteit van $\theta (d\cdot N^3)$ heeft. Dit zou verbeterd kunnen worden door een ander algoritme te gebruiken om de buren van een punt te bepalen. Ook de methode voor de editing/condensing zou verbeterd kunnen worden, er is in sommige gevallen slechts weinig reductie waardoor de benodigde CPU-tijd voor het testen ook toeneemt. De nauwkeurigheid op testsets verschilt, voor MNIST is deze redelijk laag en voor grotere sets zou de nauwkeurigheid dus verbeterd mogen worden. Voor de XOR-set en de diabetes-set is de nauwkeurigheid goed.
 
-\section{Verbeteringen} %de titels hieronder kunnen vast wel beter
+\section{Aanpassingen} %de titels hieronder kunnen vast wel beter
 
-\subsection{Uitleg}
+\subsection{Methodes}
 \subsubsection{Dynamic editing}
-Omdat eerste en tweede orde editing weinig reductie van de dataset opleverden, hebben we een nieuwe methode bedacht om meer punten te verwijderen: dynamic editing. Net zoals bij de andere soorten editing bepalen de buren van een punt of het punt mag blijven of niet. We gebruiken een ‘threshold’ als eis om het punt te verwijderen. Als het aantal buren van een punt, met dezelfde klasse als dat punt, minder is dan de threshold vermenigvuldigt met het aantal buren, dan wordt dat punt verwijdert. Dus hoe hoger de threshold, hoe meer punten er verwijdert worden, dus hoe meer reductie. In Figuur \ref{buren} wordt het punt dus verwijdert als de threshold hoger is dan 2/3.
+Omdat eerste en tweede orde editing weinig reductie van de dataset opleverden, hebben we een nieuwe methode bedacht om meer punten te verwijderen: dynamic editing. Net zoals bij de andere soorten editing bepalen de buren van een punt of het punt mag blijven of niet. We gebruiken een ``threshold'' als eis om het punt te verwijderen. Als het aantal buren van een punt met dezelfde klasse, gedeeld door het totaal aantal buren, minder is dan de threshold, dan wordt dat punt verwijderd. Dus hoe hoger de threshold, hoe meer punten er verwijderd worden, dus hoe meer reductie. Voor de waarde van de threshold moet dus een getal tussen 0 en 1 gekozen worden. Hierbij worden er g\'e\'en punten verwijderd bij een waarde van 0, en worden alle punten grenzend aan minstens \'{e}\'{e}n punt van een andere klasse verwijderd bij een waarde van 1.  In Figuur \ref{buren} wordt het punt verwijderd als de threshold hoger is dan 2/3, omdat dit deel van zijn buren van dezelfde klasse is.
 \clearpage
 
 \begin{figure}[!h]
@@ -242,16 +252,87 @@ Omdat eerste en tweede orde editing weinig reductie van de dataset opleverden, h
     \label{buren}
 \end{figure}
 
-\subsubsection{Adaptive nearest Neighbour}
-Adaptive nearest neighbour is een variant op k-nearest neighbour. In plaats van de k dichtstbijzijnde punten gebruikt Adaptive nearest neighbor alle buren van een nieuw punt om de klasse van dat nieuwe punt te bepalen. De klasse van het nieuwe punt wordt dus bepaald door de klasse die meerderheid van de buren van het nieuwe punt heeft. Op deze manier wordt gebruik gemaakt van de eigenschappen van de graaf die is opgebouwd uit de punten van de trainset. 
+Dynamic editing is vooral gericht op een sterkere reductie dan eerste en tweede orde editing: het haalt punten sneller weg dan eerste orde editing. De reductie van eerste orde editing was erg laag  (onder de 40\%) zodra er meer ruis werd toegevoegd, met als gevolg dat ook condensing niet effectief was. Eerste orde editing bevat geen parameters om de editing krachtiger te maken, waardoor een nieuwe methode nodig was. De daadwerkelijke dicision boundary wordt ook vervormd door sterkere editing.
+
+
+\subsubsection{Adaptive nearest neighbour}
+Adaptive nearest neighbour is een variant op k-nearest neighbour. In plaats van de k dichtstbijzijnde punten gebruikt adaptive nearest neighbor alle buren van een nieuw punt om de klasse van dat nieuwe punt te bepalen. De klasse van het nieuwe punt wordt dus bepaald door de klasse die meerderheid van de buren van het nieuwe punt heeft. Op deze manier wordt gebruik gemaakt van de eigenschappen van de graaf die is opgebouwd uit de punten van de trainset. Dit ligt voor de hand, omdat er sowieso al een variant op kNN wordt toegepast door alleen de buren te beschouwen, in plaats van alle punten. Het doorlopen van alle neighbours kost ook veel minder performance dan het doorlopen van k nearest neighbours. \underline{$\mathbf{hoezo?}$}
+Voor het stemmen voor elk punt is wel meer informatie beschikbaar, dus dit zou een verbetering van de accuracy kunnen opleveren.
+
+Het kNN-principe is bedoeld om te voorkomen dat er te veel punten invloed uit oefenen terwijl ze niet dicht bij een punt liggen, maar dit wordt al voorkomen door een proximity graph. De selectie van punten die voor het classificeren wordt gebruikt, wordt dan dus niet meer door k bepaald, maar puur door de criteria van de proximity graph.
 
 \subsubsection{Weighted Classification}
-Weighted classification is bedoeld als een aanvulling op adaptive nearest neighbour, maar kan in principe ook in andere combinaties gebruikt worden. Bij weighted classification wordt telt de klasse van elke buur (die meedoet bij het stemmen) meer mee als hij dichter bij het punt ligt en minder als hij verder weg van het punt ligt. Als factor hebben we 1/d en 1/(d+1) gebruikt. Hierbij is d de euclidische afstand van het punt to de buur.
+Weighted classification is bedoeld als een aanvulling op adaptive nearest neighbour, maar kan ook in andere combinaties gebruikt worden. Bij weighted classification telt de klasse van elke buur, die meedoet bij het stemmen, meer mee als hij dichter bij het punt ligt en minder als hij verder weg van het punt ligt. Als factoren hebben we 1/d en 1/(d+1) gebruikt. Hierbij is d de euclidische afstand van het punt tot de buur.
 
 \subsection{Experimenten}
 \subsubsection{Dynamic editing}
-We hebben dynamic editing getest op verschillende datasets door 80\% van de trainset te gebruiken om de graaf mee te construeren, en vervolgens de overige 20\% van de trainset te gebruiken als testset. Hieronder staan de tabellen en bijbehorende grafiek.\\
+We hebben dynamic editing getest op verschillende datasets door 80\% van de trainset te gebruiken om de graaf mee te construeren, en vervolgens de overige 20\% van de trainset te gebruiken als testset. Hieronder staat de bijbehorende grafiek. De tabellen met de meetgegevens zijn te vinden in de bijlage.
+
+\begin{center} \includegraphics[scale=0.7]{GG_dynamic} \end{center}
+
+Om te bepalen hoe goed dynamic editing is hebben we voor elke dataset de threshold met de 'beste score` genomen uit bovenstaande grafiek. De beste score hebben we bepaald door voor iedere threshold de som van de accuracy en reduction te bepalen, en vervolgens de hoogste te nemen. Deze score hebben we vergeleken met eerste orde editing. Hieronder staat eerst de tabel met de resultaten van eerste orde editing en vervolgens de grafiek waarin dynamic en eerste orde editing worden vergeleken.\\
 \\
+\begin{tabular}{|c|c|c|c|c|}  \hline			
+Dataset	& Accuracy &	Reduction \\ \hline
+Xor	& 85 &	72,5 \\
+Diabetes &	73,79 &	49,63 \\
+Nieuwsgroepen &	91,5 &	31 \\ \hline
+\end{tabular} \\
+
+\begin{center} \includegraphics[scale=0.5]{dynamic_vs_1storder} \end{center}
+
+\subsubsection{Adaptive nearest neighbour}
+Adaptive nearest neighbour is getest door deze voor verschillende datasets te vergelijken met kNN. Hierbij is voor k=1 gekozen in de vergelijking, omdat deze gemiddeld het beste presteerde over de verschillende datasets. Hieronder zijn de resultaten weergegeven.\\
+
+%Voor de vergelijking met kNN met k=1 zijn wederom de beste waarden met weighting genomen. De resultaten zijn weergegeven in de volgende tabel.  \underline{$\mathbf{geen grafiek?}$}
+
+\begin{tabular}{|c|c|c|c|c|}  \hline	
+Dataset & Nearest neighbour & Accuracy &	Reduction \\ \hline
+Xor & K=1	& 85 &	72,5 \\
+Xor & Adaptive &	75 &	72,5 \\
+Diabetes & K=1 &	73,79 &	49,63 \\
+Diabetes & Adaptive & 	77,67 &	49,63 \\
+Nieuwsgroepen & K=1 &	91,5 &	31 \\
+Nieuwsgroepen & Adaptive &	94,5 &	31 \\ \hline
+\end{tabular} \\
+
+\begin{center} \includegraphics[scale=0.7]{GG_k1_vs_adaptive} \end{center}
+
+\subsubsection{Weighting}
+Voor het testen van Weighting hebben we dynamic editing en adaptive nearest neighbour gebruikt, omdat dit gemiddeld de beste resultaten leverde over de XOR-, diabetes- en nieuwsgroepen-datasets.  Hieronder zijn de resultaten voor verschillende threshold-waarden weergegeven. Bijbehorende tabellen met de meetgegevens zijn te vinden in de bijlage.
+\begin{center} \includegraphics[scale=0.7]{GG_dynamic_adaptive} \end{center}
+
+\subsection{Karakterherkenning}
+In de voorgaande experimenten zijn vooral de XOR-, diabetes-, en nieuwsgroepen-datasets gebruikt, omdat het lastig is om voor grotere datasets veel herhalingen uit te voeren. Omdat resultaten kunnen variëren voor verschillende soorten gegevens, hebben we voor \'{e}\'{e}n grotere dataset, die van karakterherkenning, enkele verschillende methodes toegepast. 
+Omdat deze dataset erg groot was hebben we RNG gebruikt. Het duurt namelijk minder lang om een RNG te maken dan een GG. Dit komt doordat de eis voor het hebben van een edge strenger is, waardoor er eerder een punt wordt gevonden waardoor de eis niet geldt, waardoor dus eerder gestopt wordt met zoeken.
+
+Hieronder staan de gegevens in een tabel en daaronder de bijbehorende grafiek. Standaard (als er niks staat) wordt eerste orde editing gebruikt en geen weighting toegepast bij het classificeren.
+
+\begin{tabular}{|c|c|c|c|c|}  \hline
+Instellingen & Accuracy &	Reduction \\ \hline
+Dynamic K=1	&	98.8 &  87.0 \\
+Dynamic Adaptive &		98.8 &  87.0 \\
+K=1 &				98.9 & 86.1 \\
+Adaptive &			96.8  & 86.1 \\
+Weighted Adaptive (1/(d+1)) &	98.7& 86.1 \\
+Weighted Adaptive (1/d) &	98.8  & 86.1 \\
+Dynamic Weighted &			98.7 & 85.4 \\ \hline
+\end{tabular} \\
+
+\begin{center} \includegraphics[scale=0.5]{dynamic_vs_1st_karakter} \end{center}
+
+\subsection{Conclusies}
+\subsubsection{Dynamic editing}
+Dynamic editing zorgde voor een verbetering in prestaties van de diabetes- en nieuwsgroepen- en karakter-dataset. Bij de XOR-dataset waren de verschillen minimaal. Mogelijk was deze dataset zo klein dat de desicion boundary te veel werd aangepast, waardoor de accuracy bij een hoge threshold onder de 65\% kwam. Bij de andere datasets bleef de accuracy tot een threshold van ongeveer 0,8 op een acceptabel niveau: die lag rond de accuracy die ook behaald werd met eerste orde editing. Voor thresholds tussen de 0,6 en 0,8 lag de accuracy in veel gevallen zelfs hoger dan met eerste orde editing. Dit is te verklaren doordat er meer ruis wordt verwijderd, dan dat er punten bij de decision boundary worden verwijderd. De reductie lag voor hoge thresholds altijd boven die van eerste orde editing. Dit is logisch omdat dynamic editing simpelweg een strengere eis is. Bovendien zorgt het verwijderen van ruis er ook voor dat er meer punten met condensing verwijderd kunnen worden.
+
+\subsubsection{Adaptive nearest neighbour}
+In alle geteste datasets waren verschillen tussen kNN en adaptive NN klein, namelijk binnen enkele procenten. Bij de XOR-set en bij de karakter-set met eerste orde editing was kNN accurater, bij de andere tests was adaptive NN accurater. De verschillen tussen kNN en adaptive NN waren bij de karakter-set vrij klein: voor zowel accuracy als reductie waren deze minder dan \'{e}\'{e}n procent. Het verschilt dus per dataset welke methode een beter resultaat geeft. Het kNN-principe heeft als voordeel dat punten die ver uit elkaar liggen geen invloed op elkaar hebben. Punten zullen sneller binnen een boundary liggen als ze dichtbij elkaar liggen. Adaptive NN maakt daarentegen beter gebruik van de eigenschappen van proximity graphs: punten die ver weg liggen, worden alleen verbonden als er geen punten  tussenin liggen. Een proximity graph zegt daardoor meer over welke klassen er zijn in de verschillende richtingen van een punt, in plaats van binnen een bepaalde straal van een punt. Beide eigenschappen blijken dus voordelig te kunnen zijn.
+
+\subsubsection{Weighting}
+Ook voor weighted adaptive NN geldt dat de resultaten verschillen per dataset. Bij de XOR-set is kNN enkele procenten (rond 10\%) accurater, bij de diabetes- en nieuwsgroepen-datasets is weighted adaptive NN tot enkele procenten (rond 4\%) accurater. Het is lastig om precies te beredeneren waarom dit beter of slechter is in bepaalde sets. Voor het aantal punten dat beschouwd wordt bij het stemmen valt weighted adaptive NN tussen gewone adaptive NN en kNN in: er worden wel meer punten bekeken dan in kNN met k=1, maar de buitenste punten van adaptive NN worden minder zwaar meegeteld. De voor en nadelen van adaptive NN en kNN zullen dus bij weighted ook een rol spelen.
+
+\subsection{Bijlagen}
+Tabellen bij dynamic editing (5.2.1):\\
 Xor\\
 \begin{tabular}{|c|c|c|c|c|}  \hline			
 Threshold	& Accuracy &	Reduction \\ \hline
@@ -297,33 +378,9 @@ Threshold	& Accuracy &	Reduction \\ \hline
 0,93 &	78,5 &	86,88 \\
 1 &	73,5 &	91 \\ \hline
 \end{tabular} \\
-
-\begin{center} \includegraphics[scale=0.7]{GG_dynamic} \end{center}
-
-Om te bepalen hoe goed dynamic editing is hebben we voor elke dataset de threshold met de 'beste score` genomen uit bovenstaande grafiek. De beste score hebben we bepaald door voor iedere threshold de som van de accuracy en reduction te bepalen, en vervolgens de hoogste te nemen. Deze score hebben we vergeleken met eerste orde editing. Hieronder staat eerst de tabel met de resultaten van eerste orde editing en vervolgens de grafiek waarin dynamic en eerste orde editing worden vergeleken.\\
 \\
-\begin{tabular}{|c|c|c|c|c|}  \hline			
-Dataset	& Accuracy &	Reduction \\ \hline
-Xor	& 85 &	72,5 \\
-Diabetes &	73,79 &	49,63 \\
-Nieuwsgroepen &	91,5 &	31 \\ \hline
-\end{tabular} \\
+Tabellen bij GG dynamic editing, weighted adaptive nearest neighbour (5.2.3):
 
-\begin{center} \includegraphics[scale=0.5]{dynamic_vs_1storder} \end{center}
-
-\subsubsection{Weighted adaptive nearest neighbour}
-
-\begin{tabular}{|c|c|c|c|c|}  \hline	
-Dataset & Nearest neighbour & Accuracy &	Reduction \\ \hline
-Xor & K=1	& 85 &	72,5 \\
-Xor & Adaptive &	75 &	72,5 \\
-Diabetes & K=1 &	73,79 &	49,63 \\
-Diabetes & Adaptive & 	77,67 &	49,63 \\
-Nieuwsgroepen & K=1 &	91,5 &	31 \\
-Nieuwsgroepen & Adaptive &	94,5 &	31 \\ \hline
-\end{tabular} \\
-
-\begin{center} \includegraphics[scale=0.7]{GG_k1_vs_adaptive} \end{center}
 Xor\\
 \begin{tabular}{|c|c|c|c|c|}  \hline			
 Threshold	& Accuracy &	Reduction \\ \hline
@@ -371,27 +428,5 @@ Threshold	& Accuracy &	Reduction \\ \hline
 0,93 &	75,5 &	86,88 \\
 1 &	71 &	91 \\ \hline
 \end{tabular} \\
-
-\begin{center} \includegraphics[scale=0.7]{GG_dynamic_adaptive} \end{center}
-
-\subsection{Karakter herkenning}
-Omdat deze dataset zo groot was hebben we RNG gebruikt. Het duurt namelijk minder lang om een RNG te maken dan een GG. Dit komt doordat de eis voor het hebben van een edge strenger is, waardoor er eerder een punt wordt gevonden waardoor de eis niet geldt, waardoor dus eerder gestopt wordt met zoeken.
-
-Hieronder staat de tabel gegevens en daaronder de bijbehorende grafiek. Als er geen edit methode wordt genoemd is er eerste orde editing gebruikt en niet weighted classification.
-
-\begin{tabular}{|c|c|c|c|c|}  \hline
-Instellingen & Accuracy &	Reduction \\ \hline
-Dynamic K=1	&	98.8 &  87.0 \\
-Dynamic Adaptive &		98.8 &  87.0 \\
-K=1					98.9 & 86.1 \\
-Adaptive &			96.8  & 86.1 \\
-Weighted Adaptive (1/d+1) &	98.7& 86.1 \\
-Weighted Adaptive (1/d) &	98.8  & 86.1 \\
-Dynamic Weighted &			98.7 & 85.4 \\ \hline
-\end{tabular} \\
-
-\begin{center} \includegraphics[scale=0.5]{dynamic_vs_1st_karakter} \end{center}
-
-\subsection{Conclusies}
 
 \end{document}

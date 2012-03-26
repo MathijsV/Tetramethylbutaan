@@ -7,10 +7,6 @@ package tetramethylbutaan;
 
 import java.util.Comparator;
 
-/**
- *
- * @author pbos
- */
 public class DistanceComparator implements Comparator<Point>
 {
     private Point p;

@@ -8,10 +8,6 @@ package tetramethylbutaan;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- *
- * @author mvos
- */
 public class EdgeCreator implements Runnable
 {
     private Graph graph;
@@ -59,7 +55,6 @@ public class EdgeCreator implements Runnable
                 if(pointIt.hasNext()) pointIt.next();
             }
 		}
-        //System.out.println("Thread ready " + modulo + " (Processed " + num + " items)");
     }
 
 }

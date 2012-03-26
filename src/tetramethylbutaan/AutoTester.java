@@ -32,23 +32,14 @@ public class AutoTester
 			for(int err = 0; err <= 40; err += 10)
 			{
 				int numTotal = 0, numWrongTotal = 0;
-				
-				//System.out.println("Testing with training set " + i + ", error rate " + err);
-				//System.out.println("Creating graph...");
 				Graph graph = new TrainingSetReader("trainSets/train_set_" + String.format("%03d", i) +
 														"_n" + n + "_err" + err + ".txt", new RelatedNeighbourHoodGraph()).getData();
 				graph.createEdges();
-				//System.out.println("Editing graph...");
 				graph.edit(order);
-				//System.out.println("Condensing graph...");
 				graph.condense();
-				//System.out.println("Graph ready. Starting tests...");
 				
 				for(int j = 1; j <= 40; j++)
 				{
-					//System.out.println("Testing set " + j);
-					//System.out.print(j + " ");
-					
 					Iterator<Integer> results = new TestSetReader("testSets/test_data_" + String.format("%03d", j)
 																	+ "_n" + n + ".txt", graph, "testResults/classes.txt")
 													.getResults().iterator();
@@ -84,7 +75,6 @@ public class AutoTester
 		            {
 						e.printStackTrace();
 					}
-		            //System.out.println("Test complete. Items tested: " + num + ", wrong predictions: " + numWrong + " (" + ((double) numWrong / num) * 100 + "%)");
 				}
 			}
 		}

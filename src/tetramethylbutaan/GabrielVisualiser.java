@@ -7,15 +7,6 @@ import java.awt.RenderingHints;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author ramonjanssen
- */
 public class GabrielVisualiser extends JFrame
 {
     private static final int POINT_SIZE = 5;

@@ -16,13 +16,18 @@
 \contentsline {subsection}{\numberline {3.3}Diabetes}{13}
 \contentsline {subsection}{\numberline {3.4}Performance}{14}
 \contentsline {section}{\numberline {4}Conclusie}{14}
-\contentsline {section}{\numberline {5}Verbeteringen}{15}
-\contentsline {subsection}{\numberline {5.1}Uitleg}{15}
+\contentsline {section}{\numberline {5}Aanpassingen}{15}
+\contentsline {subsection}{\numberline {5.1}Methodes}{15}
 \contentsline {subsubsection}{\numberline {5.1.1}Dynamic editing}{15}
-\contentsline {subsubsection}{\numberline {5.1.2}Adaptive nearest Neighbour}{16}
+\contentsline {subsubsection}{\numberline {5.1.2}Adaptive nearest neighbour}{16}
 \contentsline {subsubsection}{\numberline {5.1.3}Weighted Classification}{16}
 \contentsline {subsection}{\numberline {5.2}Experimenten}{16}
 \contentsline {subsubsection}{\numberline {5.2.1}Dynamic editing}{16}
-\contentsline {subsubsection}{\numberline {5.2.2}Weighted adaptive nearest neighbour}{18}
-\contentsline {subsection}{\numberline {5.3}Karakter herkenning}{20}
-\contentsline {subsection}{\numberline {5.4}Conclusies}{21}
+\contentsline {subsubsection}{\numberline {5.2.2}Adaptive nearest neighbour}{18}
+\contentsline {subsubsection}{\numberline {5.2.3}Weighting}{19}
+\contentsline {subsection}{\numberline {5.3}Karakterherkenning}{20}
+\contentsline {subsection}{\numberline {5.4}Conclusies}{20}
+\contentsline {subsubsection}{\numberline {5.4.1}Dynamic editing}{20}
+\contentsline {subsubsection}{\numberline {5.4.2}Adaptive nearest neighbour}{21}
+\contentsline {subsubsection}{\numberline {5.4.3}Weighting}{21}
+\contentsline {subsection}{\numberline {5.5}Bijlagen}{21}

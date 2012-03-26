@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 public abstract class Graph
 {
 	public final static int EDIT_1ST_ORDER = 1, EDIT_2ND_ORDER = 2, EDIT_DYNAMIC = 3;
-    public static int K = 0;
+    public static int K = 0; //K = 0 := adaptive nearest neighbour
     public final static int NUM_THREADS = 4;
     public static double NOISE_TRESHOLD = 0.5 ;//+ 0.5/Point.classes.length;
     private static int[] totalVotes = null;
@@ -28,51 +28,6 @@ public abstract class Graph
 	{
 		points.add(p);
 	}
-
-    /*
-	public void makeGraph(List<GraphPoint> ps)
-    {
-        for(GraphPoint p: ps)
-        {
-            addPointToGraph(p, p.getClassification());
-        }
-    }*/
-	/*
-	public void addPointToGraph(GraphPoint p, int classification)
-	{
-		List<GraphPoint> neighbours = new ArrayList<GraphPoint>();
-		for(GraphPoint gp: points)
-		{
-			if(isNeighbour(p, gp))
-			{
-				neighbours.add(gp);
-			}
-		}
-		for(GraphPoint gp: points)
-        {
-            if(isNeighbour(p, gp))
-            {
-                neighbours.add(gp);
-                neighbours.addAll(gp.getEdges());
-                break;
-            }
-        }
-		for(GraphPoint nb1: neighbours)
-		{
-			for(GraphPoint nb2: neighbours)
-			{
-				if(nb1.hasEdgeWith(nb2))
-				{
-					nb1.removeEdge(nb2);
-					nb2.removeEdge(nb1);
-				}
-			}
-		}
-		p.setClassification(classification);
-		points.add(p);
-		neighbours.add(p);
-		recalculateEdges(neighbours);
-	}*/
 	
 	/**
 	 * Tests which classification a given point p will get according to this graph.
@@ -88,20 +43,10 @@ public abstract class Graph
 		while(iter.hasNext())
 		{
 			GraphPoint point = iter.next();
-			if(p.equals(point)) return point.getClassification();
+			if(p.equals(point)) 
+				return point.getClassification();
 			if(isNeighbour(p, point))
-            {
-				//if(!neighbours.contains(point))
-					neighbours.add(point);
-
-                /*for(GraphPoint neighbour : point.getEdges())
-                {
-                    if(neighbour != p && !neighbours.contains(neighbour))
-                    {
-                        neighbours.add(neighbour);
-                    }
-                }*/
-            }
+				neighbours.add(point);
 		}
         List<GraphPoint> toTest = new ArrayList<GraphPoint>();
         if (K == 0) // adaptive!
@@ -206,8 +151,6 @@ public abstract class Graph
         return noise;
     }
 
-
-
 	/**
 	 * @param neighbours: the neighbours of a point or subgraph
 	 * @return the most occuring class in neighbours 
@@ -282,12 +225,6 @@ public abstract class Graph
 	}
 	
 	/**
-	 * calculates the (new) edges between the neighbours
-	 * @param neighbours: the neighbours of already a removed point
-	 */
-	//protected abstract void recalculateEdges(List<GraphPoint> neighbours);
-	
-	/**
 	 * removes graphpoints from a graph which are misclassified by their neighbours
 	 * @param editOrder: EDIT_1ST_ORDER or EDIT_2ND_ORDER expected
 	 */
@@ -307,8 +244,6 @@ public abstract class Graph
                 || (editOrder == EDIT_DYNAMIC   && isNoise(p)))
                         removePoints.add(p);
 			}
-            //System.out.println("Editing: removing " + removePoints.size() + " points");
-           // points.removeAll(removePoints);
             Iterator<GraphPoint> removeIt = removePoints.iterator();
             Iterator<GraphPoint> allPointsIt = points.iterator();
 
@@ -353,19 +288,11 @@ public abstract class Graph
 			if(!hasNeighbourOfOtherClass(p))
 			{
                 pointsToRemove.add(p);
-				// This graphpoint has the same type as all its neighbours, so we can safely ignore it.
-				/*List<GraphPoint> neighbours = p.getEdges();
-				Iterator<GraphPoint> neighbourIterator = neighbours.iterator();
-				while(neighbourIterator.hasNext())
-					neighbourIterator.next().removeEdge(p);
-				iter.remove();
-				recalculateEdges(neighbours);*/
 			}
 		}
 
         Iterator<GraphPoint> allPointsIt = points.iterator();
         Iterator<GraphPoint> removeIt = pointsToRemove.iterator();
-        //System.out.println("Condensing: removing " + pointsToRemove.size() + " points");
         while (removeIt.hasNext())
         {
             GraphPoint pointToRemove = removeIt.next();

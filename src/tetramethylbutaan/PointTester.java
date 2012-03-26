@@ -36,39 +36,10 @@ public class PointTester implements Runnable
     {
         Iterator<GraphPoint> testPoint = testPoints.iterator();
 
-        AWESOMELOOP : while(testPoint.hasNext())
+        while(testPoint.hasNext())
         {
-            List<GraphPoint> neighbours = new ArrayList<GraphPoint>();
             GraphPoint p = testPoint.next();
-
             results.add(graph.test(p, false));
-            /*Iterator<GraphPoint> iter = graph.getPoints().iterator();
-            while(iter.hasNext())
-            {
-                GraphPoint point = iter.next();
-                if(p.equals(point))
-                {
-                    results.add(point.getClassification());
-                    continue AWESOMELOOP;
-                }
-
-                if(graph.isNeighbour(p, point))
-                {
-                    if(!neighbours.contains(point))
-                        neighbours.add(point);
-
-                    /*for(GraphPoint neighbour : point.getEdges())
-                    {
-                        if(neighbour != p && !neighbours.contains(neighbour))
-                        {
-                            neighbours.add(neighbour);
-                        }
-                    }*//*
-                }
-            }
-
-            Collections.sort(neighbours, new DistanceComparator(p));
-            results.add(Graph.getFirstOrderClassification(neighbours.subList(0, (Math.min(Graph.K, neighbours.size())))));*/
         }
     }
 

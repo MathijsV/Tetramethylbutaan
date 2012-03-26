@@ -49,11 +49,9 @@ public class TrainingSetReader
             	{
             		String attribute = scan.next();
                 	features[i] = Double.parseDouble(attribute);
-                	//System.out.println(features[i]);
             	}
             	
             	int classification = scan.nextInt();
-            	//System.out.println(classification);
             	
             	points.add(new GraphPoint(features, classification));
             }

@@ -7,11 +7,13 @@ import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * 
+ * @author Mathijs Vos (4024443), Ramon Janssen (0711667), Petra van den Bos (4064453)
+ *
+ */
 public class Main
 {
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args)
 	{
 		new Main();
@@ -19,25 +21,11 @@ public class Main
 	
 	public Main()
 	{
-		/*for (int K = 1; K <= 5; K +=2)
-		{
-			Graph.K = K;
-			for (String dataType : new String[]{"xor", "diabetes", "mnist"})
-			{
-				setDimensions(dataType);
-				for (int order = Graph.EDIT_1ST_ORDER; order <= Graph.EDIT_2ND_ORDER; order++)
-				{
-					System.out.println("\n" + dataType + ", order " + order + ", K = " + K + ":");
-					trainingSetTest(dataType + "_train.txt", new RelatedNeighbourHoodGraph(), order, 0.8);
-				}
-			}
-		}*/
 		//customTest();
 		//autoTest();
         String[] types = {"xor","diabetes","nieuws"};
         Graph.K = 1;
         massTrainingSetTest(types, 0.0, 1, 0.1, Graph.EDIT_1ST_ORDER, 0.8, false);
-        //System.out.println("a\t\tb");
 	}
 
 	private void setDimensions(String dataType)
@@ -163,10 +151,6 @@ public class Main
 		String testFile = fileType + "_test.txt";
 		System.out.println("Collecting results...");
         new TestSetReader(testFile, graph, "testResults/nieuw/classes_RNG.txt");
-        /*graph.K = 3;
-        new TestSetReader(testFile, graph, "testResults/classes_k3_2ndorderedit_1stordertest.txt");
-        graph.K = 5;
-        new TestSetReader(testFile, graph, "testResults/classes_k5_2ndorderedit_1stordertest.txt");*/
         try
         {
             // Create file
@@ -190,15 +174,7 @@ public class Main
         {
             System.err.println("Error: " + ex.getMessage());
         }
-		//System.out.println(Point.numEuclCalled);
-		//System.out.println(Point.euclTime);
-		
-        /*
-		Iterator<Integer> result = new TestSetReader("mnist_train.txt", gabrielGraph).getResults().iterator();
-		while(result.hasNext())
-			System.out.println(result.next());*/
-		//new TestSetReader("trainSets/train_set_001_n1000_err0.txt", gabrielGraph);*/
-		//new GabrielVisualiser(gabrielGraph);
+		//new GabrielVisualiser(graph);
 	}
 	
 	private void autoTest()

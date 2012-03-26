@@ -29,18 +29,14 @@ public class TestSetReader
             Scanner scan = new Scanner(file);
             for(; scan.hasNext(); num++)
             {
-            	//if(num > 800)
             	{
 	            	double[] features = new double[GraphPoint.nrDimensions];
 	            	for (int i = 0; i < Point.nrDimensions; i += 1)
 	            	{
 	            		String attribute = scan.next();
-	                	features[i] = Double.parseDouble(attribute);// - 0.000001;
-	                	//System.out.println(features[i]);
+	                	features[i] = Double.parseDouble(attribute);
 	            	}
-	            	//int classification = scan.nextInt();
 	                pointsToTest.add(new GraphPoint(features));
-	            	//expectedResults.add(classification);
             	}
             }
             file.close();
@@ -69,10 +65,6 @@ public class TestSetReader
         {
             Logger.getLogger(Graph.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //System.out.println("Klaar");
-
-        //Iterator<Integer> e = expectedResults.iterator();
-        //int numWrong = 0;
 
         BufferedWriter out = null;
         
@@ -91,15 +83,13 @@ public class TestSetReader
         for(PointTester t : testers)
         {
             Iterator<Integer> i1 = t.getResults().iterator();
-            while(i1.hasNext() /*&& e.hasNext()*/)
+            while(i1.hasNext())
             {
                 try
                 {
                     int classification = i1.next();
                     results.add(classification);
                     out.write(classification + "\n");
-                    //if (classification != e.next())
-                    //    numWrong++;
                 }
                 catch (IOException ex)
                 {
@@ -116,8 +106,6 @@ public class TestSetReader
         {
             Logger.getLogger(TestSetReader.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        //System.out.println(((double) numWrong / num)*100 + "%");
     }
 	
 	public List<Integer> getResults()
